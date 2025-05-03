@@ -10,6 +10,7 @@ namespace utl
 	/// <summary>
 	/// 参照カウンタとオブジェクトのポインタを管理するクラス
 	/// 管理するオブジェクトとこのインスタンスを格納するメモリは引数で渡すMemoryAllocatorで作成する
+	/// このクラスのインスタンスを開放するときは、コンストラクタに渡したメモリアロケータで開放する必要がある
 	/// </summary>
 	/// <typeparam name="Type"></typeparam>
 	template<typename Type>
@@ -23,6 +24,12 @@ namespace utl
 		template<typename T, typename...ArgTypes>
 		friend RefCounter<T>* MakeRefCounterWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args);
 
+		/// <summary>
+		/// 有効なRefCounterを作成するコンストラクタ
+		/// MakeRefCounterWithAllocから作成されることを想定している。
+		/// </summary>
+		/// <param name="ptr"></param>
+		/// <param name="alloc"></param>
 		RefCounter(Type* ptr, IMemoryAllocator* alloc)
 			:ptr_(ptr)
 			, alloc_(alloc)
@@ -33,6 +40,9 @@ namespace utl
 
 	public:
 
+		/// <summary>
+		/// 空のRefCounterを作成するコンストラクタ
+		/// </summary>
 		RefCounter()
 			:ptr_(nullptr)
 			, alloc_(nullptr)
@@ -42,7 +52,7 @@ namespace utl
 		}
 
 		//---------------------------------
-		// 作成
+		// 開放
 		//---------------------------------
 
 		~RefCounter() = default;
@@ -51,43 +61,66 @@ namespace utl
 		// カウント
 		//---------------------------------
 
+		/// <summary>
+		/// 参照カウンタを増加
+		/// </summary>
 		void Look()
 		{
 			++counter_;
 		}
 
+		/// <summary>
+		/// 参照カウンタを現象
+		/// メモリの開放は外部に任せる
+		/// </summary>
 		void UnLook()
 		{
-
 			--counter_;
 		}
 
+		/// <summary>
+		/// 現在参照している数を返す
+		/// </summary>
+		/// <returns></returns>
 		int Counter()const
 		{
 			return counter_;
 		}
 
+		/// <summary>
+		/// 管理してるインスタンスのポインタを取得
+		/// </summary>
+		/// <returns></returns>
 		Type* GetPtr()const
 		{
 			return ptr_;
 		}
 
+		/// <summary>
+		/// このクラスと管理してるインスタンスのメモリを管理するアロケータのポインタを取得
+		/// </summary>
+		/// <returns></returns>
 		MemoryAllocatorHolder& GetAlloc()
 		{
 			return alloc_;
 		}
 
-		void Reset()
+		/// <summary>
+		/// 確保したインスタンスを開放する
+		/// </summary>
+		bool Reset()
 		{
 			if (counter_ > 0 || ptr_ == nullptr)
 			{
-				return;
+				return false;
 			}
 
 			ptr_->~Type();
 			alloc_.Deallocate(ptr_);
 			ptr_ = nullptr;
 			counter_ = 0;
+
+			return true;
 		}
 
 	private:
@@ -100,16 +133,26 @@ namespace utl
 
 	};
 
+	/// <summary>
+	/// メモリアロケータを使ってRefCounterを作成する関数
+	/// RefCounterとRefCounterが管理するインスタンスの両方をメモリアロケータで確保したメモリに配置する
+	/// </summary>
+	/// <typeparam name="Type"></typeparam>
+	/// <typeparam name="...ArgTypes"></typeparam>
+	/// <param name="alloc"></param>
+	/// <param name="...args"></param>
+	/// <returns></returns>
 	template<typename Type, typename...ArgTypes>
 	RefCounter<Type>* MakeRefCounterWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args)
 	{
 		MemoryAllocatorHolder allocHolder(alloc);
 
+		// 型のインスタンスを作成
 		void* mem = allocHolder.Allocate(sizeof(Type));
 		new(mem) Type(args...);
 		Type* ptr = static_cast<Type*>(mem);
 
-		// Counterを作る
+		// Counterを作成
 		void* counterMem = allocHolder.Allocate(sizeof(RefCounter<Type>));
 		new (counterMem) RefCounter<Type>(ptr, alloc);
 		RefCounter<Type>* counter = static_cast<RefCounter<Type>*>(counterMem);
@@ -117,8 +160,10 @@ namespace utl
 		return counter;
 	}
 
-
-
+	/// <summary>
+	/// 共有ポインタ
+	/// </summary>
+	/// <typeparam name="Type"></typeparam>
 	template<typename Type>
 	class SharedPtr
 	{
@@ -131,13 +176,21 @@ namespace utl
 		template<typename T, typename...ArgTypes>
 		friend SharedPtr<T> MakeSharedWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args);
 
+		/// <summary>
+		/// リソースのカウンタを渡して作成するコンストラクタ
+		/// </summary>
+		/// <param name="ref"></param>
 		SharedPtr(RefCounter<Type>* ref)
 			:ref_(ref)
 		{
 			ref->Look();
 		}
+
 	public:
 
+		/// <summary>
+		/// 空の共有ポインタを作成するコンストラクタ
+		/// </summary>
 		SharedPtr()
 			:ref_(nullptr)
 		{
@@ -149,6 +202,11 @@ namespace utl
 		// 代入
 		//---------------------------------
 
+		/// <summary>
+		/// 共有ポインタをコピーして作成するコンストラクタ
+		/// 共有カウントは増える
+		/// </summary>
+		/// <param name="src"></param>
 		SharedPtr(const SharedPtr& src)
 			:ref_(src.ref_)
 		{
@@ -159,6 +217,13 @@ namespace utl
 
 			ref_->Look();
 		}
+		/// <summary>
+		/// 共有ポインタをコピーする
+		/// 共有カウントは増える
+		/// すでに管理してたら参照を外す
+		/// </summary>
+		/// <param name="src"></param>
+		/// <returns></returns>
 		SharedPtr<Type>& operator=(const SharedPtr& src)
 		{
 			// すでに扱ってるリソースがあったら開放
@@ -174,16 +239,26 @@ namespace utl
 			return *this;
 		}
 
+		/// <summary>
+		/// 共有ポインタの所有権を移動して作成するコンストラクタ
+		/// </summary>
+		/// <param name="src"></param>
 		SharedPtr(SharedPtr<Type>&& src)noexcept
 			:ref_(src.ref_)
 		{
-			ref_->Look();
-			src.Reset();
+			src.ref_ = nullptr;
 		}
-
-		SharedPtr<Type>& operator=(SharedPtr<Type>&& src)
+		/// <summary>
+		/// 共有ポインタの所有権を移動する
+		/// すでに管理してたら参照を外す
+		/// </summary>
+		/// <param name="src"></param>
+		/// <returns></returns>
+		SharedPtr<Type>& operator=(SharedPtr<Type>&& src)noexcept
 		{
+			// すでに扱ってるリソースがあったら開放
 			Reset();
+
 			ref_ = src.ref_;
 			src.ref_ = nullptr;
 			return *this;
@@ -194,6 +269,10 @@ namespace utl
 		// 開放
 		//---------------------------------
 
+		/// <summary>
+		/// 参照をやめる
+		/// インスタンスを参照してる存在がいなくなれば開放する
+		/// </summary>
 		void Reset()
 		{
 			if (ref_ == nullptr)
@@ -202,14 +281,14 @@ namespace utl
 			}
 
 			ref_->UnLook();
-			if (ref_->Counter() > 0)
-			{
-				return;
-			}
-			ref_->Reset();
-			MemoryAllocatorHolder allocHolder = ref_->GetAlloc();
 
-			allocHolder.Deallocate(ref_);
+			// カウンタが０以下になったらインスタンスを開放する
+			if (ref_->Counter() <= 0)
+			{
+				ref_->Reset();
+				MemoryAllocatorHolder allocHolder = ref_->GetAlloc();
+				allocHolder.Deallocate(ref_);
+			}
 
 			ref_ = nullptr;
 		}
@@ -223,6 +302,10 @@ namespace utl
 		// 取得
 		//---------------------------------
 
+		/// <summary>
+		/// 管理してるインスタンスのポインタを返す
+		/// </summary>
+		/// <returns></returns>
 		Type* Get()const
 		{
 			if (ref_ == nullptr)
@@ -232,6 +315,10 @@ namespace utl
 			return ref_->GetPtr();
 		}
 
+		/// <summary>
+		/// 管理してるインスタンスのポインタにアクセスする
+		/// </summary>
+		/// <returns></returns>
 		Type* operator->()const
 		{
 			assert(ref_ != nullptr && "nullptrの実体にアクセスしようとしています");
@@ -239,12 +326,19 @@ namespace utl
 			return Get();
 		}
 
+		/// <summary>
+		/// 管理しているインスタンスの実体を返す
+		/// </summary>
+		/// <returns></returns>
 		Type& operator*()const
 		{
 			assert(ref_ != nullptr && "nullptrの実体にアクセスしようとしています");
 			return *Get();
 		}
 
+		/// <summary>
+		/// 有効なインスタンスを管理しているか
+		/// </summary>
 		operator bool()const
 		{
 			if (ref_ == nullptr)
@@ -258,6 +352,11 @@ namespace utl
 		// 比較
 		//---------------------------------
 
+		/// <summary>
+		/// 生ポインタと管理しているインスタンスのポインタが一致すればtrue
+		/// </summary>
+		/// <param name="ptr"></param>
+		/// <returns></returns>
 		const bool operator==(const Type* ptr)const
 		{
 			if (ref_ == nullptr)
@@ -267,6 +366,11 @@ namespace utl
 
 			return ref_->GetPtr() == ptr;
 		}
+		/// <summary>
+		/// SharedPtrが同じインスタンスを管理していればtrue
+		/// </summary>
+		/// <param name="ptr"></param>
+		/// <returns></returns>
 		const bool operator==(const SharedPtr<Type> ptr)const
 		{
 			if (ref_ == ptr.ref_)
@@ -282,10 +386,20 @@ namespace utl
 			return (*this) == ptr.Get();
 		}
 
+		/// <summary>
+		/// 生ポインタと管理しているインスタンスのポインタが一致しなければtrue
+		/// </summary>
+		/// <param name="ptr"></param>
+		/// <returns></returns>
 		const bool operator!=(const Type* ptr)const
 		{
 			return !((*this) == ptr);
 		}
+		/// <summary>
+		/// SharedPtrが同じインスタンスを管理していなければtrue
+		/// </summary>
+		/// <param name="ptr"></param>
+		/// <returns></returns>
 		const bool operator!=(const SharedPtr<Type> ptr)const
 		{
 			return !((*this) == ptr);
@@ -297,6 +411,14 @@ namespace utl
 
 	};
 
+	/// <summary>
+	/// アロケータを指定してSharedPtrを作成する
+	/// </summary>
+	/// <typeparam name="Type"></typeparam>
+	/// <typeparam name="...ArgTypes"></typeparam>
+	/// <param name="alloc"></param>
+	/// <param name="...args"></param>
+	/// <returns></returns>
 	template<typename Type, typename...ArgTypes>
 	SharedPtr<Type> MakeSharedWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args)
 	{
@@ -305,6 +427,13 @@ namespace utl
 		return SharedPtr<Type>(counter);
 	}
 
+	/// <summary>
+	/// SharedPtrを作成する
+	/// </summary>
+	/// <typeparam name="Type"></typeparam>
+	/// <typeparam name="...ArgTypes"></typeparam>
+	/// <param name="...args"></param>
+	/// <returns></returns>
 	template<typename Type, typename...ArgTypes>
 	SharedPtr<Type> MakeShared(ArgTypes&&...args)
 	{

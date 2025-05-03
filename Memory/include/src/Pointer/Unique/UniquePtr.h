@@ -190,7 +190,7 @@ namespace utl
 	};
 
 	/// <summary>
-	/// UniquePtrを作成する関数
+	/// アロケータを指定してUniquePtrを作成する関数
 	/// </summary>
 	/// <typeparam name="Type"></typeparam>
 	/// <typeparam name="...ArgTypes"></typeparam>
@@ -212,6 +212,13 @@ namespace utl
 		return UniquePtr<Type>(static_cast<Type*>(mem), allocator);
 	}
 
+	/// <summary>
+	/// UniquePtrを作成する関数
+	/// </summary>
+	/// <typeparam name="Type"></typeparam>
+	/// <typeparam name="...ArgTypes"></typeparam>
+	/// <param name="...args"></param>
+	/// <returns></returns>
 	template<typename Type, typename...ArgTypes>
 	inline UniquePtr<Type> MakeUnique(ArgTypes&&...args)
 	{
