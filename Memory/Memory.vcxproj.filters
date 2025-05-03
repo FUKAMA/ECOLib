@@ -42,10 +42,16 @@
     <ClInclude Include="include\src\Pointer\Unique\UniquePtr.h">
       <Filter>include\src\Pointer\Unique</Filter>
     </ClInclude>
+    <ClInclude Include="include\src\Pointer\Shared\SharedPtr.h">
+      <Filter>include\src\Pointer\Shared</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\src\Allocator\MemoryAllocator.cpp">
       <Filter>include\src\Allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="include\src\Pointer\Shared\SharedPtr.cpp">
+      <Filter>include\src\Pointer\Shared</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

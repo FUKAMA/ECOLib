@@ -6,12 +6,18 @@
       <Filter>tests\Memory\Pointer\Unique</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="tests\Memory\Pointer\Shared\SharedPtrTest.cpp">
+      <Filter>tests\Memory\Pointer\Shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tests\Memory\Pointer\Unique\UniquePtrTest.h">
       <Filter>tests\Memory\Pointer\Unique</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="tests\Memory\Pointer\Shared\SharedPtrTest.h">
+      <Filter>tests\Memory\Pointer\Shared</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -39,8 +39,8 @@ namespace utl
 		/// 空のUniquePtrを作成するコンストラクタ
 		/// </summary>
 		UniquePtr()
-			:ptr_(nullptr)
-			, alloc_(nullptr)
+			: alloc_(nullptr)
+			, ptr_(nullptr)
 		{
 
 		}
@@ -101,7 +101,7 @@ namespace utl
 		/// </summary>
 		void Reset()
 		{
-			if (!IsActive())
+			if (!(*this))
 			{
 				return;
 			}
@@ -137,8 +137,8 @@ namespace utl
 
 		Type* operator->()const
 		{
-			assert(ptr_ != nullptr && "nullptrに->を使用しています！");
-			return ptr_;
+			assert(ptr_ != nullptr && "nullptrの実体にアクセスしようとしています！");
+			return Get();
 		}
 
 		/// <summary>
@@ -151,7 +151,7 @@ namespace utl
 			return *ptr_;
 		}
 
-		bool IsActive()const
+		operator bool()const
 		{
 			return ptr_ != nullptr;
 		}
@@ -164,8 +164,16 @@ namespace utl
 		{
 			return ptr_ == ptr;
 		}
+		const bool operator==(const UniquePtr<Type> ptr)const
+		{
+			return ptr_ == ptr->Get();
+		}
 
 		const bool operator!=(const Type* ptr)const
+		{
+			return !((*this) == ptr);
+		}
+		const bool operator!=(const UniquePtr<Type> ptr)const
 		{
 			return !((*this) == ptr);
 		}

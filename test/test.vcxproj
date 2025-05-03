@@ -115,6 +115,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="tests\Memory\Pointer\Shared\SharedPtrTest.h" />
     <ClInclude Include="tests\Memory\Pointer\Unique\UniquePtrTest.h" />
   </ItemGroup>
   <ItemGroup>
@@ -123,6 +124,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="test.cpp" />
+    <ClCompile Include="tests\Memory\Pointer\Shared\SharedPtrTest.cpp" />
     <ClCompile Include="tests\Memory\Pointer\Unique\UniquePtrTest.cpp" />
   </ItemGroup>
   <ItemGroup>

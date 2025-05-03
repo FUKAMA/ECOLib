@@ -21,11 +21,13 @@
   <ItemGroup>
     <ClInclude Include="include\Memory.hpp" />
     <ClInclude Include="include\src\Allocator\MemoryAllocator.h" />
+    <ClInclude Include="include\src\Pointer\Shared\SharedPtr.h" />
     <ClInclude Include="include\src\Pointer\Unique\UniquePtr.h" />
     <ClInclude Include="include\src\RefCounter\RefCounter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\src\Allocator\MemoryAllocator.cpp" />
+    <ClCompile Include="include\src\Pointer\Shared\SharedPtr.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
