@@ -1,4 +1,5 @@
 #pragma once
+#include <cassert>
 #include "../../Allocator/MemoryAllocator.h"
 
 namespace utl
@@ -134,6 +135,22 @@ namespace utl
 	};
 
 	/// <summary>
+	/// 参照カウンタとインスタンスのメモリを並べて配置するための構造体
+	/// ポインタとしてのみの利用を目的とし、インスタンス化は許さない
+	/// Typeのインスタンスを開放したら両方開放されるようにInsを先頭に配置
+	/// </summary>
+	/// <typeparam name="Type"></typeparam>
+	template<typename Type>
+	class RefCounterToIns
+	{
+	public:
+		RefCounterToIns() = delete;
+
+		Type ins;
+		RefCounter<Type> typeCounter;
+	};
+
+	/// <summary>
 	/// メモリアロケータを使ってRefCounterを作成する関数
 	/// RefCounterとRefCounterが管理するインスタンスの両方をメモリアロケータで確保したメモリに配置する
 	/// </summary>
@@ -147,18 +164,41 @@ namespace utl
 	{
 		MemoryAllocatorHolder allocHolder(alloc);
 
-		// 型のインスタンスを作成
-		void* mem = allocHolder.Allocate(sizeof(Type));
-		new(mem) Type(args...);
-		Type* ptr = static_cast<Type*>(mem);
+		// RefCounterToInsを使い、RefCounterとTypeのメモリを同時に確保
+		void* mem = allocHolder.Allocate(sizeof(RefCounterToIns<Type>));
+		RefCounterToIns<Type>* allocResult = static_cast<RefCounterToIns<Type>*>(mem);
+		// 確保したメモリにインスタンスを作成
+		new (&allocResult->ins) Type(args...);
+		new (&allocResult->typeCounter) RefCounter<Type>(&allocResult->ins, alloc);
 
-		// Counterを作成
-		void* counterMem = allocHolder.Allocate(sizeof(RefCounter<Type>));
-		new (counterMem) RefCounter<Type>(ptr, alloc);
-		RefCounter<Type>* counter = static_cast<RefCounter<Type>*>(counterMem);
-
-		return counter;
+		return &allocResult->typeCounter;
 	}
+	///// <summary>
+	///// メモリアロケータを使ってRefCounterを作成する関数
+	///// RefCounterとRefCounterが管理するインスタンスの両方をメモリアロケータで確保したメモリに配置する
+	///// </summary>
+	///// <typeparam name="Type"></typeparam>
+	///// <typeparam name="...ArgTypes"></typeparam>
+	///// <param name="alloc"></param>
+	///// <param name="...args"></param>
+	///// <returns></returns>
+	//template<typename Type, typename...ArgTypes>
+	//RefCounter<Type>* MakeRefCounterWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args)
+	//{
+	//	MemoryAllocatorHolder allocHolder(alloc);
+
+	//	// 型のインスタンスを作成
+	//	void* mem = allocHolder.Allocate(sizeof(Type));
+	//	new(mem) Type(args...);
+	//	Type* ptr = static_cast<Type*>(mem);
+
+	//	// Counterを作成
+	//	void* counterMem = allocHolder.Allocate(sizeof(RefCounter<Type>));
+	//	new (counterMem) RefCounter<Type>(ptr, alloc);
+	//	RefCounter<Type>* counter = static_cast<RefCounter<Type>*>(counterMem);
+
+	//	return counter;
+	//}
 
 	/// <summary>
 	/// 共有ポインタ
@@ -226,6 +266,12 @@ namespace utl
 		/// <returns></returns>
 		SharedPtr<Type>& operator=(const SharedPtr& src)
 		{
+			// 自分自身を代入してないか確認
+			if (this == &src || this->ref_ == src.ref_)
+			{
+				return *this;
+			}
+
 			// すでに扱ってるリソースがあったら開放
 			Reset();
 
@@ -286,8 +332,6 @@ namespace utl
 			if (ref_->Counter() <= 0)
 			{
 				ref_->Reset();
-				MemoryAllocatorHolder allocHolder = ref_->GetAlloc();
-				allocHolder.Deallocate(ref_);
 			}
 
 			ref_ = nullptr;
@@ -371,7 +415,7 @@ namespace utl
 		/// </summary>
 		/// <param name="ptr"></param>
 		/// <returns></returns>
-		const bool operator==(const SharedPtr<Type> ptr)const
+		const bool operator==(const SharedPtr<Type>& ptr)const
 		{
 			if (ref_ == ptr.ref_)
 			{
@@ -400,7 +444,7 @@ namespace utl
 		/// </summary>
 		/// <param name="ptr"></param>
 		/// <returns></returns>
-		const bool operator!=(const SharedPtr<Type> ptr)const
+		const bool operator!=(const SharedPtr<Type>& ptr)const
 		{
 			return !((*this) == ptr);
 		}

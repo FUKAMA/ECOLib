@@ -1,6 +1,6 @@
 #pragma once
 #include "../../Allocator/MemoryAllocator.h"
-#include <cstdlib>
+#include <cassert>
 
 namespace utl
 {
@@ -164,16 +164,16 @@ namespace utl
 		{
 			return ptr_ == ptr;
 		}
-		const bool operator==(const UniquePtr<Type> ptr)const
+		const bool operator==(const UniquePtr<Type>& ptr)const
 		{
-			return ptr_ == ptr->Get();
+			return ptr_ == ptr.Get();
 		}
 
 		const bool operator!=(const Type* ptr)const
 		{
 			return !((*this) == ptr);
 		}
-		const bool operator!=(const UniquePtr<Type> ptr)const
+		const bool operator!=(const UniquePtr<Type>& ptr)const
 		{
 			return !((*this) == ptr);
 		}
