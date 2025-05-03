@@ -1,0 +1,56 @@
+# ビルド関連
+build/
+vs/
+lib/
+external/
+packages/
+CMakeFiles/
+x64/
+
+# Visual Studio
+.vs/
+*.user
+*.log
+
+# CMake
+CMakeCache.txt
+CMakeScripts/
+Testing/
+CTestTestfile.cmake
+Makefile
+install_manifest.txt
+# *.cmake
+
+# バイナリ・実行ファイル
+*.obj
+*.o
+*.so
+*.a
+*.lib
+*.dll
+*.exe
+*.out
+*.class
+
+# 一時ファイル
+*.tmp
+*.temp
+*.bak
+*.swp
+*.lock
+
+# IDE設定
+.idea/
+*.iml
+*.DS_Store
+
+# Pythonバイトコード
+*.pyc
+*.pyo
+__pycache__/
+
+# その他
+*.log
+*.zip
+*.tar.gz
+*.7z

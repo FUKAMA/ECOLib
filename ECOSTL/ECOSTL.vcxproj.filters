@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{3f41e9ac-dfd7-4358-ab8b-c658f0a9d6c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src">
+      <UniqueIdentifier>{2c71793f-185c-41ef-8bde-0cc40f96bc4c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\ECOSTL.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\src\dummy.h">
+      <Filter>include\src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="include\src\dummy.cpp">
+      <Filter>include\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
