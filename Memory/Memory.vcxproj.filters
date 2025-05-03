@@ -22,9 +22,6 @@
     <Filter Include="include\src\Pointer\Shared">
       <UniqueIdentifier>{9373d234-c913-43a7-aa02-608594b09d6d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\src\RefCounter">
-      <UniqueIdentifier>{a0a8fb93-36e0-42b5-8bca-f28ad6bec8dd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\src\Pointer\Unique">
       <UniqueIdentifier>{d98bb43c-9944-4f08-ae54-675c5ef14769}</UniqueIdentifier>
     </Filter>
@@ -35,9 +32,6 @@
     </ClInclude>
     <ClInclude Include="include\src\Allocator\MemoryAllocator.h">
       <Filter>include\src\Allocator</Filter>
-    </ClInclude>
-    <ClInclude Include="include\src\RefCounter\RefCounter.h">
-      <Filter>include\src\RefCounter</Filter>
     </ClInclude>
     <ClInclude Include="include\src\Pointer\Unique\UniquePtr.h">
       <Filter>include\src\Pointer\Unique</Filter>

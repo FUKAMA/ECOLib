@@ -1,5 +1,5 @@
 #pragma once
-#include "../../RefCounter/RefCounter.h"
+#include "../../Allocator/MemoryAllocator.h"
 
 namespace utl
 {
@@ -16,8 +16,12 @@ namespace utl
 	class RefCounter
 	{
 	private:
+		//---------------------------------
+		// çÏê¨
+		//---------------------------------
+
 		template<typename T, typename...ArgTypes>
-		friend SharedPtr<T> MakeSharedWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args);
+		friend RefCounter<T>* MakeRefCounterWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args);
 
 		RefCounter(Type* ptr, IMemoryAllocator* alloc)
 			:ptr_(ptr)
@@ -37,7 +41,15 @@ namespace utl
 
 		}
 
+		//---------------------------------
+		// çÏê¨
+		//---------------------------------
+
 		~RefCounter() = default;
+
+		//---------------------------------
+		// ÉJÉEÉìÉg
+		//---------------------------------
 
 		void Look()
 		{
@@ -87,6 +99,25 @@ namespace utl
 		int counter_;
 
 	};
+
+	template<typename Type, typename...ArgTypes>
+	RefCounter<Type>* MakeRefCounterWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args)
+	{
+		MemoryAllocatorHolder allocHolder(alloc);
+
+		void* mem = allocHolder.Allocate(sizeof(Type));
+		new(mem) Type(args...);
+		Type* ptr = static_cast<Type*>(mem);
+
+		// CounterÇçÏÇÈ
+		void* counterMem = allocHolder.Allocate(sizeof(RefCounter<Type>));
+		new (counterMem) RefCounter<Type>(ptr, alloc);
+		RefCounter<Type>* counter = static_cast<RefCounter<Type>*>(counterMem);
+
+		return counter;
+	}
+
+
 
 	template<typename Type>
 	class SharedPtr
@@ -260,16 +291,6 @@ namespace utl
 			return !((*this) == ptr);
 		}
 
-
-
-
-
-
-
-
-
-
-
 	private:
 
 		RefCounter<Type>* ref_;
@@ -279,17 +300,7 @@ namespace utl
 	template<typename Type, typename...ArgTypes>
 	SharedPtr<Type> MakeSharedWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args)
 	{
-		MemoryAllocatorHolder allocHolder(alloc);
-
-		void* mem = allocHolder.Allocate(sizeof(Type));
-		new(mem) Type(args...);
-		Type* ptr = static_cast<Type*>(mem);
-
-		// CounterÇçÏÇÈ
-		void* counterMem = allocHolder.Allocate(sizeof(RefCounter<Type>));
-		new (counterMem) RefCounter<Type>(ptr, alloc);
-		RefCounter<Type>* counter = static_cast<RefCounter<Type>*>(counterMem);
-
+		RefCounter<Type>* counter = MakeRefCounterWithAlloc<Type>(alloc, args...);
 		// ViewÇçÏÇÈ
 		return SharedPtr<Type>(counter);
 	}
