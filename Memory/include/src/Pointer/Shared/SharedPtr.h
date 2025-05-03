@@ -173,32 +173,6 @@ namespace utl
 
 		return &allocResult->typeCounter;
 	}
-	///// <summary>
-	///// メモリアロケータを使ってRefCounterを作成する関数
-	///// RefCounterとRefCounterが管理するインスタンスの両方をメモリアロケータで確保したメモリに配置する
-	///// </summary>
-	///// <typeparam name="Type"></typeparam>
-	///// <typeparam name="...ArgTypes"></typeparam>
-	///// <param name="alloc"></param>
-	///// <param name="...args"></param>
-	///// <returns></returns>
-	//template<typename Type, typename...ArgTypes>
-	//RefCounter<Type>* MakeRefCounterWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args)
-	//{
-	//	MemoryAllocatorHolder allocHolder(alloc);
-
-	//	// 型のインスタンスを作成
-	//	void* mem = allocHolder.Allocate(sizeof(Type));
-	//	new(mem) Type(args...);
-	//	Type* ptr = static_cast<Type*>(mem);
-
-	//	// Counterを作成
-	//	void* counterMem = allocHolder.Allocate(sizeof(RefCounter<Type>));
-	//	new (counterMem) RefCounter<Type>(ptr, alloc);
-	//	RefCounter<Type>* counter = static_cast<RefCounter<Type>*>(counterMem);
-
-	//	return counter;
-	//}
 
 	/// <summary>
 	/// 共有ポインタ
