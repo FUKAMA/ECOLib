@@ -14,6 +14,5 @@ TEST(SharedPtrTest, TestName)
 	spString1 = utl::MakeShared<std::string>("ff");
 
 	spString2 = spString1;
-
 }
 
