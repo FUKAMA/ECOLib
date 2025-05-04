@@ -43,13 +43,18 @@ namespace utl
 		{
 		}
 
+		IMemoryAllocator* Get()const
+		{
+			return alloc_;
+		}
+
 		[[nodiscard]] void* Allocate(const size_t size);
 
 		void Deallocate(void* allocated);
 
-		void Reset()
+		void Reset(IMemoryAllocator* alloc = nullptr)
 		{
-			alloc_ = nullptr;
+			alloc_ = alloc;
 		}
 
 	private:

@@ -7,12 +7,6 @@
     <Filter Include="include\src">
       <UniqueIdentifier>{5cc7c3ff-231f-444a-bedf-5b600076e7a9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\src\Container">
-      <UniqueIdentifier>{700c4b24-43ca-498e-aeea-3f1e97fbf090}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="include\src\Container\Resizable">
-      <UniqueIdentifier>{70d60b6b-ce5c-437a-bfc6-43544294b3e9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\src\Allocator">
       <UniqueIdentifier>{9f8ba752-7e04-404c-9dae-ef16077796d3}</UniqueIdentifier>
     </Filter>
@@ -24,6 +18,12 @@
     </Filter>
     <Filter Include="include\src\Pointer\Unique">
       <UniqueIdentifier>{d98bb43c-9944-4f08-ae54-675c5ef14769}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\Block">
+      <UniqueIdentifier>{5aed2aca-f6d9-4806-93f6-34c8bbdeb973}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\Block\Resizable">
+      <UniqueIdentifier>{55abc744-68e0-44ee-be53-9463e11e8d3d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -39,6 +39,9 @@
     <ClInclude Include="include\src\Pointer\Shared\SharedPtr.h">
       <Filter>include\src\Pointer\Shared</Filter>
     </ClInclude>
+    <ClInclude Include="include\src\Block\Resizable\ResizableMemoryBlock.h">
+      <Filter>include\src\Block\Resizable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\src\Allocator\MemoryAllocator.cpp">
@@ -46,6 +49,9 @@
     </ClCompile>
     <ClCompile Include="include\src\Pointer\Shared\SharedPtr.cpp">
       <Filter>include\src\Pointer\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="include\src\Block\Resizable\ResizableMemoryBlock.cpp">
+      <Filter>include\src\Block\Resizable</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

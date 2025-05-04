@@ -7,7 +7,6 @@ namespace utl
 	template<typename Type>
 	class SharedPtr;
 
-
 	/// <summary>
 	/// 参照カウンタとオブジェクトのポインタを管理するクラス
 	/// 管理するオブジェクトとこのインスタンスを格納するメモリは引数で渡すMemoryAllocatorで作成する

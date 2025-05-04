@@ -21,11 +21,13 @@
   <ItemGroup>
     <ClInclude Include="include\Memory.hpp" />
     <ClInclude Include="include\src\Allocator\MemoryAllocator.h" />
+    <ClInclude Include="include\src\Block\Resizable\ResizableMemoryBlock.h" />
     <ClInclude Include="include\src\Pointer\Shared\SharedPtr.h" />
     <ClInclude Include="include\src\Pointer\Unique\UniquePtr.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\src\Allocator\MemoryAllocator.cpp" />
+    <ClCompile Include="include\src\Block\Resizable\ResizableMemoryBlock.cpp" />
     <ClCompile Include="include\src\Pointer\Shared\SharedPtr.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
