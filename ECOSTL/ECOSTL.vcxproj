@@ -126,7 +126,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Memory\include\;$(SolutionDir)$(SolutionName)\include\;$(SolutionDir)$(SolutionName)\external\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)TypeInfo\include\;$(SolutionDir)Container\include\;$(SolutionDir)Memory\include\;$(SolutionDir)$(SolutionName)\include\;$(SolutionDir)$(SolutionName)\external\include\</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
@@ -138,8 +138,8 @@
       <OutputFile>$(SolutionDir)$(SolutionName)\build\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)Memory\build\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Memory.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)TypeInfo\build\$(Configuration)\;$(SolutionDir)Memory\build\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Memory.lib;TypeInfo.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -153,7 +153,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Memory\include\;$(SolutionDir)$(SolutionName)\include\;$(SolutionDir)$(SolutionName)\external\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)TypeInfo\include\;$(SolutionDir)Container\include\;$(SolutionDir)Memory\include\;$(SolutionDir)$(SolutionName)\include\;$(SolutionDir)$(SolutionName)\external\include\</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
@@ -167,8 +167,8 @@
       <OutputFile>$(SolutionDir)$(SolutionName)\build\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)Memory\build\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Memory.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)TypeInfo\build\$(Configuration)\;$(SolutionDir)Memory\build\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Memory.lib;TypeInfo.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
