@@ -159,7 +159,7 @@ namespace utl
 	/// <param name="...args"></param>
 	/// <returns></returns>
 	template<typename Type, typename...ArgTypes>
-	RefCounter<Type>* MakeRefCounterWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args)
+	inline RefCounter<Type>* MakeRefCounterWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args)
 	{
 		MemoryAllocatorHolder allocHolder(alloc);
 
@@ -437,7 +437,7 @@ namespace utl
 	/// <param name="...args"></param>
 	/// <returns></returns>
 	template<typename Type, typename...ArgTypes>
-	SharedPtr<Type> MakeSharedWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args)
+	inline SharedPtr<Type> MakeSharedWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args)
 	{
 		RefCounter<Type>* counter = MakeRefCounterWithAlloc<Type>(alloc, args...);
 		// ViewÇçÏÇÈ
@@ -452,7 +452,7 @@ namespace utl
 	/// <param name="...args"></param>
 	/// <returns></returns>
 	template<typename Type, typename...ArgTypes>
-	SharedPtr<Type> MakeShared(ArgTypes&&...args)
+	inline SharedPtr<Type> MakeShared(ArgTypes&&...args)
 	{
 		return MakeSharedWithAlloc<Type>(nullptr, args...);
 	}
