@@ -28,7 +28,6 @@
   <ItemGroup>
     <ClCompile Include="include\src\Allocator\MemoryAllocator.cpp" />
     <ClCompile Include="include\src\Block\Resizable\ResizableMemoryBlock.cpp" />
-    <ClCompile Include="include\src\Pointer\Shared\SharedPtr.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -141,7 +140,7 @@
     </Link>
     <Lib>
       <OutputFile>$(SolutionDir)$(ProjectName)\build\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>\$(SolutionDir)$(ProjectName)\external\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>\$(SolutionDir)$(ProjectName)\external\build\$(Configuration)\</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -167,7 +166,7 @@
     </Link>
     <Lib>
       <OutputFile>$(SolutionDir)$(ProjectName)\build\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>\$(SolutionDir)$(ProjectName)\external\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>\$(SolutionDir)$(ProjectName)\external\build\$(Configuration)\</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

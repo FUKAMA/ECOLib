@@ -1,4 +1,5 @@
 #pragma once
-#include "../../Memory/include/Memory.hpp"
-#include "../../TypeInfo/include/TypeInfo.hpp"
 
+#include "Memory.hpp"
+#include "TypeInfo.hpp"
+#include "Container.hpp"

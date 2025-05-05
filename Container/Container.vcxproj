@@ -129,7 +129,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(SolutionName)\include\;$(SolutionDir)$(SolutionName)\external\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Memory\include\;$(SolutionDir)$(ProjectName)\include\;$(SolutionDir)$(SolutionName)\external\include\</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
@@ -141,7 +141,7 @@
       <OutputFile>$(SolutionDir)$(ProjectName)\build\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)Memory\build\$(Configuration)\;\$(SolutionDir)$(ProjectName)\external\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Memory\build\$(Configuration)\;$(SolutionDir)$(ProjectName)\external\$(Configuration)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>Memory.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
@@ -156,7 +156,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(SolutionName)\include\;$(SolutionDir)$(SolutionName)\external\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Memory\include\;$(SolutionDir)$(ProjectName)\include\;$(SolutionDir)$(SolutionName)\external\include\</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
@@ -170,7 +170,7 @@
       <OutputFile>$(SolutionDir)$(ProjectName)\build\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)Memory\build\$(Configuration)\;\$(SolutionDir)$(ProjectName)\external\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Memory\build\$(Configuration)\;$(SolutionDir)$(ProjectName)\external\$(Configuration)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>Memory.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>

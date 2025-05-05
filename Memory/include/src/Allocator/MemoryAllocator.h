@@ -7,7 +7,8 @@ namespace utl
 	/// </summary>
 	class IMemoryAllocator
 	{
-	public:
+	protected:
+		friend class MemoryAllocatorHolder;
 
 		/// <summary>
 		/// ‹ó‚Ìƒƒ‚ƒŠ‚ğŠm•Û‚·‚éˆ—‚ğÀ‘•‚·‚é‰¼‘zŠÖ”
@@ -83,4 +84,5 @@ namespace utl
 		virtual void Deallocate(void* allocated)override final;
 
 	};
+
 }
