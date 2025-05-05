@@ -12,46 +12,28 @@ namespace utl
 		// 作成
 		//--------------------------------------
 
-
-		StaticArray(IMemoryAllocator* alloc = nullptr)
-			: alloc_(alloc)
-			, begin_(alloc_.Allocate(SIZE * sizeof(Type)))
+		StaticArray()
+			:mem_()
 		{
 			for (size_t i = 0; i < SIZE; ++i)
 			{
-				Type* ptr = begin_ + i;
-				new (ptr) Type();
-			}
-		}
-
-		template<typename...ArgTypes>
-		StaticArray(IMemoryAllocator* alloc, ArgTypes&&...args)
-			: alloc_(alloc)
-			, begin_(alloc_.Allocate(SIZE * sizeof(Type)))
-		{
-			for (size_t i = 0; i < SIZE; ++i)
-			{
-				Type* ptr = begin_ + i;
-				new (ptr) Type(args...);
+				new (Get(i)) Type();
 			}
 		}
 
 		template<typename...ArgTypes>
 		StaticArray(ArgTypes&&...args)
-			: StaticArray::StaticArray(nullptr, args...)
+			:mem_()
 		{
+			for (size_t i = 0; i < SIZE; ++i)
+			{
+				new (Get(i)) Type(args...);
+			}
 		}
-		//template<typename...ArgTypes>
-		//StaticArray(ArgTypes&&...args)
-		//	: alloc_(nullptr)
-		//	, begin_(alloc_.Allocate(SIZE * sizeof(Type)))
-		//{
-		//	for (size_t i = 0; i < SIZE; ++i)
-		//	{
-		//		Type* ptr = begin_ + i;
-		//		new (ptr) Type(args...);
-		//	}
-		//}
+
+		//--------------------------------------
+		// 開放
+		//--------------------------------------
 
 		~StaticArray()
 		{
@@ -59,35 +41,46 @@ namespace utl
 			{
 				Get(i)->~Type();
 			}
-
-			alloc_.Deallocate(begin_);
-			begin_ = nullptr;
 		}
+
+		//--------------------------------------
+		// 取得
+		//--------------------------------------
 
 		Type& operator[](const size_t index)const
 		{
+			assert(index < SIZE && "範囲外アクセスです");
 			return *Get(index);
 		}
 
 		Type* Data()const
 		{
-			return begin_;
+			return Get(0);
 		}
 
-		Type* Get(const size_t index)const
+		constexpr size_t Size()const
 		{
-			if (index >= SIZE)
-			{
-				return nullptr;
-			}
-			return begin_ + index;
+			return SIZE;
 		}
+
+		void* GetVoid(const size_t index)
+		{
+			assert(index < SIZE && "範囲外アクセスです");
+
+			char* ptr = &mem_[index * sizeof(Type)];
+			return static_cast<void*>(ptr);
+		}
+
+		Type* Get(const size_t index)
+		{
+			void* ptr = GetVoid(index);
+			return static_cast<Type*>(ptr);
+		}
+
 
 	private:
-
-		MemoryAllocatorHolder alloc_;
-
-		Type* begin_;
+		
+		alignas(Type) char mem_[SIZE * sizeof(Type)];
 
 	};
 }

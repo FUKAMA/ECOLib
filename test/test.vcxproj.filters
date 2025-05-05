@@ -12,6 +12,9 @@
     <ClCompile Include="tests\TypeInfo\TypeID\TypeIDTest.cpp">
       <Filter>tests\TypeInfo\TypeID</Filter>
     </ClCompile>
+    <ClCompile Include="tests\Container\Array\Dynamic\DynamicArrayTest.cpp">
+      <Filter>tests\Container\Array\Dynamic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tests\Memory\Pointer\Unique\UniquePtrTest.h">
@@ -20,6 +23,9 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="tests\Memory\Pointer\Shared\SharedPtrTest.h">
       <Filter>tests\Memory\Pointer\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\Container\Array\Dynamic\DynamicArrayTest.h">
+      <Filter>tests\Container\Array\Dynamic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +52,15 @@
     </Filter>
     <Filter Include="tests\TypeInfo\TypeID">
       <UniqueIdentifier>{5db8edcc-78b7-41f0-884b-08558887a957}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\Container">
+      <UniqueIdentifier>{da26a65a-6dae-41f6-af32-957b8a944011}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\Container\Array">
+      <UniqueIdentifier>{d56d6227-cb50-4021-9c15-1d061ba2b25c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\Container\Array\Dynamic">
+      <UniqueIdentifier>{c73cbab2-b84f-4add-802b-69ab556983b1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

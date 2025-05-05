@@ -4,5 +4,24 @@
     <Filter Include="include">
       <UniqueIdentifier>{12e71ed8-e30f-44db-92ea-e3e07057793d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\src">
+      <UniqueIdentifier>{8f31837b-a134-454f-9f54-5fc414656b13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\ILogger">
+      <UniqueIdentifier>{e82806e7-f592-4d12-a156-fd5f394547cc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Logger.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\src\ILogger\ILogger.h">
+      <Filter>include\src\ILogger</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="include\src\ILogger\ILogger.cpp">
+      <Filter>include\src\ILogger</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
