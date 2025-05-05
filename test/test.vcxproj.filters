@@ -9,6 +9,9 @@
     <ClCompile Include="tests\Memory\Pointer\Shared\SharedPtrTest.cpp">
       <Filter>tests\Memory\Pointer\Shared</Filter>
     </ClCompile>
+    <ClCompile Include="tests\TypeInfo\TypeID\TypeIDTest.cpp">
+      <Filter>tests\TypeInfo\TypeID</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tests\Memory\Pointer\Unique\UniquePtrTest.h">
@@ -37,6 +40,12 @@
     </Filter>
     <Filter Include="tests\Memory\Pointer\Shared">
       <UniqueIdentifier>{1cfc22a2-a399-40d7-af99-e886a201cd77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\TypeInfo">
+      <UniqueIdentifier>{4c64111e-8394-402e-b1da-ebddc3f443eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\TypeInfo\TypeID">
+      <UniqueIdentifier>{5db8edcc-78b7-41f0-884b-08558887a957}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -138,8 +138,8 @@
       <OutputFile>$(SolutionDir)$(SolutionName)\build\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)TypeInfo\build\$(Configuration)\;$(SolutionDir)Memory\build\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Memory.lib;TypeInfo.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)TypeInfo\build\$(Configuration)\;$(SolutionDir)Container\build\$(Configuration)\;$(SolutionDir)Memory\build\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Memory.lib;TypeInfo.lib;Container.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -167,8 +167,8 @@
       <OutputFile>$(SolutionDir)$(SolutionName)\build\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)TypeInfo\build\$(Configuration)\;$(SolutionDir)Memory\build\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Memory.lib;TypeInfo.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)TypeInfo\build\$(Configuration)\;$(SolutionDir)Container\build\$(Configuration)\;$(SolutionDir)Memory\build\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Memory.lib;TypeInfo.lib;Container.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

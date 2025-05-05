@@ -126,6 +126,7 @@
     <ClCompile Include="test.cpp" />
     <ClCompile Include="tests\Memory\Pointer\Shared\SharedPtrTest.cpp" />
     <ClCompile Include="tests\Memory\Pointer\Unique\UniquePtrTest.cpp" />
+    <ClCompile Include="tests\TypeInfo\TypeID\TypeIDTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

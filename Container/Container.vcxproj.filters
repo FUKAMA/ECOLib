@@ -7,13 +7,42 @@
     <Filter Include="include\src">
       <UniqueIdentifier>{505e0334-3298-45ad-99c7-4e22686fbff2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\src\NewFilter1">
+    <Filter Include="include\src\Vector">
       <UniqueIdentifier>{ed06ca0a-e891-4831-9d41-f69a901c1fd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\Array">
+      <UniqueIdentifier>{6d06ff95-9674-4e5a-b0f7-1bb2fea1b15a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\Array\Static">
+      <UniqueIdentifier>{ffd70809-d64b-4809-921f-5b56c8a9dc16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\Array\Dynamic">
+      <UniqueIdentifier>{f4c79f1b-95ae-4338-9eba-327f104efa83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\Array\Resizable">
+      <UniqueIdentifier>{ab30fb61-c581-42a4-9d44-da5116da77d9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Container.hpp">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\src\Array\Static\StaticArray.h">
+      <Filter>include\src\Array\Static</Filter>
+    </ClInclude>
+    <ClInclude Include="include\src\Array\Resizable\ResizableArray.h">
+      <Filter>include\src\Array\Resizable</Filter>
+    </ClInclude>
+    <ClInclude Include="include\src\Array\Dynamic\DynamicArray.h">
+      <Filter>include\src\Array\Dynamic</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="include\src\Array\Resizable\ResizableArray.cpp">
+      <Filter>include\src\Array\Resizable</Filter>
+    </ClCompile>
+    <ClCompile Include="include\src\Array\Dynamic\DynamicArray.cpp">
+      <Filter>include\src\Array\Dynamic</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

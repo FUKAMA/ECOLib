@@ -1,7 +1,13 @@
 #pragma once
 #include <atomic>
-#include <string>
+#include <string_view>
 #include <unordered_map>
+
+#if defined(_MSC_VER)
+# define TYPE_FUNC_NAME __FUNCSIG__
+#else
+# define TYPE_FUNC_NAME __PRETTY_FUNCTION__
+#endif
 
 namespace utl
 {
@@ -10,7 +16,8 @@ namespace utl
 
 	/// <summary>
 	///	型の一意なIDを生成、管理するクラス
-	/// 全ての翻訳単位で共通のインスタンスを使用することで同じIDを使用することができる
+	/// 共通のインスタンスを使用することで全ての翻訳単位で同じIDを使用することができる
+	/// シングルトンインスタンスに実体化する場合は要注意
 	/// </summary>
 	class TypeIDAllocator
 	{
@@ -25,14 +32,13 @@ namespace utl
 		template<typename...Types>
 		TypeID GetID()
 		{
-			std::string_view keyName = __FUNCSIG__;
-			auto itr = m_umNameToTypeID.find(keyName.data());
+			const char* keyName = TYPE_FUNC_NAME;
+			auto itr = m_umNameToTypeID.find(keyName);
 			if (itr == m_umNameToTypeID.end())
 			{
 				Allocate(keyName);
-				itr = m_umNameToTypeID.find(keyName.data());
+				itr = m_umNameToTypeID.find(keyName);
 			}
-
 			return itr->second;
 		}
 
@@ -49,7 +55,6 @@ namespace utl
 		std::atomic<TypeID> m_counter = 0;
 
 		std::unordered_map<std::string, TypeID> m_umNameToTypeID;
-
 	};
 
 	/// <summary>
