@@ -99,6 +99,7 @@ namespace utl
 			src.alloc_.Reset();
 			src.begin_ = nullptr;
 			src.size_ = 0;
+			return *this;
 		}
 
 		//--------------------------------------
