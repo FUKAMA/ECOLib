@@ -1,10 +1,12 @@
 #pragma once
+#include <cassert>
+#include <memory>
 #include "Memory.hpp"
 
 namespace utl
 {
 	/// <summary>
-	/// 要素数やメモリ確保のタイミングなどを動的に指定して作成する固定長の配列
+	/// 要素数を変更することができる配列
 	/// </summary>
 	/// <typeparam name="Type"></typeparam>
 	template<typename Type>
@@ -30,10 +32,11 @@ namespace utl
 		template<typename...ArgTypes>
 		void Create(const size_t size, IMemoryAllocator* alloc = nullptr, ArgTypes&&...args)
 		{
-			Release();
+			Reset();
 
 			alloc_.Reset(alloc);
-			begin_ = static_cast<Type*>(alloc_.Allocate(size * sizeof(Type)));
+			begin_ = alloc_.Allocate<Type>(size);
+			//begin_ = static_cast<Type*>(alloc_.Allocate(size * sizeof(Type)));
 			size_ = size;
 
 			for (size_t i = 0; i < size; ++i)
@@ -53,10 +56,59 @@ namespace utl
 		}
 
 		//--------------------------------------
+		// 代入
+		//--------------------------------------
+
+		ResizableArray(const ResizableArray& src)
+			: alloc_(src.alloc_.Get())
+			, begin_(src.alloc_.Allocate<Type>(src.Size()))
+			, size_(src.size_)
+		{
+			MoveMem(begin_, src.Data(), src.Size());
+		}
+
+		ResizableArray& operator=(const ResizableArray& src)
+		{
+			Reset();
+
+			alloc_.Reset(src.alloc_.Get());
+			begin_ = alloc_.Allocate<Type>(src.Size());
+			size_ = src.Size();
+
+			MoveMem(begin_, src.Data(), src.Size());
+
+			return *this;
+		}
+
+		ResizableArray(ResizableArray&& src)noexcept
+			: alloc_(src.alloc_.Get())
+			, begin_(src.begin_)
+			, size_(src.size_)
+		{
+			src.alloc_.Reset();
+			src.begin_ = nullptr;
+			src.size_ = 0;
+		}
+
+		ResizableArray& operator=(ResizableArray&& src)noexcept
+		{
+			alloc_.Reset(src.alloc_.Get());
+			begin_ = src.begin_;
+			size_ = src.Size();
+
+			src.alloc_.Reset();
+			src.begin_ = nullptr;
+			src.size_ = 0;
+		}
+
+		//--------------------------------------
 		// 開放
 		//--------------------------------------
 
-		void Release()
+		/// <summary>
+		/// 
+		/// </summary>
+		void Reset()
 		{
 			if (begin_ == nullptr)
 			{
@@ -70,40 +122,110 @@ namespace utl
 
 			alloc_.Deallocate(begin_);
 			begin_ = nullptr;
+			size_ = 0;
 		}
 
 
 		~ResizableArray()
 		{
-			Release();
+			Reset();
 		}
+
+		//--------------------------------------
+		// 操作
+		//--------------------------------------
+
+		template<typename...ArgTypes>
+		bool Resize(const size_t afterSize, ArgTypes&&...args)
+		{
+			const size_t beforeSize = size_;
+			// 今とサイズが変わらなければ何もしない
+			if (beforeSize == afterSize)
+			{
+				return false;
+			}
+
+			// 変更後要素がなくなるならリセット
+			if (afterSize == 0)
+			{
+				Reset();
+				return true;
+			}
+
+
+
+			// 新しいメモリを確保
+			Type* newMem = alloc_.Allocate<Type>(afterSize);
+
+			// 移動するメモリがあるなら移動
+			size_t moveNum = afterSize;
+			if (moveNum > beforeSize)
+			{
+				moveNum = beforeSize;
+			}
+			if (moveNum > 0)
+			{
+				MoveMem(newMem, begin_, moveNum);
+			}
+
+			// 今使ってるメモリに配置されたインスタンスを開放し、新しいメモリをセット
+			for (size_t i = 0; i < beforeSize; ++i)
+			{
+				Get(i)->~Type();
+			}
+			alloc_.Deallocate(begin_);
+			begin_ = newMem;
+
+			// 要素が作成されるならコンストラクタを呼んでインスタンスを配置
+			if (beforeSize < afterSize)
+			{
+				for (size_t i = beforeSize; i < afterSize; ++i)
+				{
+					new (Get(i)) Type(args...);
+				}
+			}
+
+			size_ = afterSize;
+
+			return true;
+		}
+
 
 		//--------------------------------------
 		// 取得
 		//--------------------------------------
 
-		Type& operator[](const size_t index)const
+		inline Type& operator[](const size_t index)const
 		{
 			return *Get(index);
 		}
 
-		Type* Data()const
+		inline Type* Data()const
 		{
 			return begin_;
 		}
 
-		const size_t Size()const
+		inline const size_t Size()const
 		{
 			return size_;
 		}
 
-		Type* Get(const size_t index)const
+		inline Type* Get(const size_t index)const
 		{
 			assert(index < size_ && "範囲外アクセスです");
-
 			return begin_ + index;
 		}
 
+	private:
+
+		void MoveMem(Type* destBegin, Type* srcBegin, size_t size)
+		{
+			for (size_t i = 0; i < size; ++i)
+			{
+				Type* ptr = destBegin + i;
+				new (ptr) Type(*(srcBegin + i));
+			}
+		}
 	private:
 
 		MemoryAllocatorHolder alloc_;

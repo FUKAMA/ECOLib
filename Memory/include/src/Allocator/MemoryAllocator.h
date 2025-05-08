@@ -51,6 +51,18 @@ namespace utl
 
 		[[nodiscard]] void* Allocate(const size_t size);
 
+		/// <summary>
+		/// 特定の型のインスタンスを任意の個数格納できるサイズの空メモリを確保する
+		/// </summary>
+		/// <typeparam name="Type"></typeparam>
+		/// <param name="num"></param>
+		/// <returns></returns>
+		template<typename Type>
+		[[nodiscard]] Type* Allocate(const size_t num = 1)
+		{
+			void* mem = Allocate(sizeof(Type) * num);
+			return static_cast<Type*>(mem);
+		}
 		void Deallocate(void* allocated);
 
 		void Reset(IMemoryAllocator* alloc = nullptr)

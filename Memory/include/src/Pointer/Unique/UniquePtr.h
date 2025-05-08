@@ -1,6 +1,7 @@
 #pragma once
-#include "../../Allocator/MemoryAllocator.h"
 #include <cassert>
+#include "../../Logger/include/Logger.hpp"
+#include "../../Allocator/MemoryAllocator.h"
 
 namespace utl
 {
@@ -91,7 +92,6 @@ namespace utl
 			return *this;
 		}
 
-
 		//----------------------------------------
 		// 開放
 		//----------------------------------------
@@ -137,7 +137,7 @@ namespace utl
 
 		Type* operator->()const
 		{
-			assert(ptr_ != nullptr && "nullptrの実体にアクセスしようとしています！");
+			assert(ptr_ != nullptr, "nullptrの実体にアクセスしようとしています！");
 			return Get();
 		}
 
@@ -147,7 +147,7 @@ namespace utl
 		/// <returns></returns>
 		Type& operator*()const
 		{
-			assert(ptr_ != nullptr && "nullptrの実体にアクセスしようとしています！");
+			assert(ptr_ != nullptr, "nullptrの実体にアクセスしようとしています！");
 			return *ptr_;
 		}
 

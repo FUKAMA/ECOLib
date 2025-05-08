@@ -11,6 +11,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ECOSTL", "ECOSTL\ECOSTL.vcx
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Memory", "Memory\Memory.vcxproj", "{BBCA2715-6CEC-48D7-AC1B-3341DAE16772}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6B69E024-8171-4A1B-95E0-1DD0454F5990} = {6B69E024-8171-4A1B-95E0-1DD0454F5990}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcxproj", "{54F70F82-96C6-46D7-B144-FEC3D85177AF}"
 	ProjectSection(ProjectDependencies) = postProject

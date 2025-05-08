@@ -74,6 +74,11 @@ namespace utl
 			return begin_ + index;
 		}
 
+		MemoryAllocatorHolder& GetMemoryAllocator()const
+		{
+			return alloc_.Get();
+		}
+
 	private:
 
 		MemoryAllocatorHolder alloc_;

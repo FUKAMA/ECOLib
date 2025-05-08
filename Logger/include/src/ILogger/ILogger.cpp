@@ -11,29 +11,37 @@ namespace utl
 
 	void LoggerHolder::Log(LogType level, const char* message, const char* file, int line)
 	{
-		switch (level)
+		if (logger_ == nullptr)
 		{
-		case utl::LogType::Debug:
-			printf("Message\t:");
-			printf(message);
-			printf("\n");
+			logger_->Log(level, message, file, line);
+		}
+		else
+		{
 
-			printf("File\t:");
-			printf(file);
-			printf("\n");
+			switch (level)
+			{
+			case utl::LogType::Debug:
+				printf("Message\t:");
+				printf(message);
+				printf("\n");
 
-			printf("Line\t:");
-			printf("%d", line);
-			printf("\n");
-			break;
-		case utl::LogType::Warn:
-			assert(0 && message);
-			break;
-		case utl::LogType::Error:
-			assert(0 && message);
-			break;
-		default:
-			break;
+				printf("File\t:");
+				printf(file);
+				printf("\n");
+
+				printf("Line\t:");
+				printf("%d", line);
+				printf("\n");
+				break;
+			case utl::LogType::Warn:
+				assert(0 && message);
+				break;
+			case utl::LogType::Error:
+				assert(0 && message);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }

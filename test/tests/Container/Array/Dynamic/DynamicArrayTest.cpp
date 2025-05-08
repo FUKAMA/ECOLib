@@ -5,7 +5,7 @@ TEST(DynamicArrayTest, TestName)
 
 	a.Get(4);
 
-	utl::DynamicArray<int, 5> s;
+	utl::DynamicArray<int, 5> s(nullptr, 77);
 
 	utl::StaticArray<int, 5> d(7);
 }

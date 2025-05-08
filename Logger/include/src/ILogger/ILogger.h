@@ -13,6 +13,8 @@ namespace utl
 	class ILogger
 	{
 	protected:
+		friend class LoggerHolder;
+
 		virtual ~ILogger() = default;
 
 		virtual void Log(LogType level, const char* message, const char* file, int line) = 0;
@@ -22,13 +24,18 @@ namespace utl
 	{
 	public:
 
-		LoggerHolder(ILogger* logger);
+		LoggerHolder(ILogger* logger = nullptr);
 
 		void Log(LogType level, const char* message, const char* file, int line);
 
 		ILogger* Get()const
 		{
 			return logger_;
+		}
+
+		void Reset(ILogger* logger = nullptr)
+		{
+			logger_ = logger;
 		}
 
 	private:
@@ -53,7 +60,7 @@ logger.Log(utl::LogType::Debug, message, __FILE__, __LINE__);
 #define LOG_WARN(is,logger, message)
 #else
 #define LOG_WARN(is,logger, message)\
-if(is)logger.Log(utl::LogType::Warn, message, __FILE__, __LINE__);
+if(is) logger.Log(utl::LogType::Warn, message, __FILE__, __LINE__);
 #endif
 
 // エラーのログを残すマクロ
@@ -62,5 +69,5 @@ if(is)logger.Log(utl::LogType::Warn, message, __FILE__, __LINE__);
 #define LOG_ERROR(is,logger, message)
 #else
 #define LOG_ERROR(is,logger, message)\
-if(is)logger.Log(utl::LogType::Error, message, __FILE__, __LINE__);
+if(is) logger.Log(utl::LogType::Error, message, __FILE__, __LINE__);
 #endif
