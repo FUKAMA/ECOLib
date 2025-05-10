@@ -67,16 +67,32 @@ namespace utl
 
 		void Deallocate(const uint32_t index, const uint32_t version)
 		{
+			// すでに無効なIDならなにもしない
+			if (!CheckActive(index, version))
+			{
+				return;
+			}
+
 
 		}
 
 		bool CheckActive(const uint32_t index, const uint32_t version)
 		{
-			if (indexToInfo_.Size())
+			// まだ生成されてない添え字なら無効
+			if (indexToInfo_.Size() <= index)
 			{
-
+				return false;
 			}
-			return indexToInfo_[index].activate;
+
+			// 添え字の最新バージョンで無ければ無効
+			IDInfo& info = indexToInfo_[index];
+			if (info.version != version)
+			{
+				return false;
+			}
+
+			// 添え字の有効状態を返す
+			return info.activate;
 		}
 
 	private:
