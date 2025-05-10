@@ -19,9 +19,13 @@ TEST(DynamicArrayTest, TestName)
 	vA.PushBack(1);
 	vA.EmplaceBack(1);
 
+	vA.Resize(9, 14);
 	vA.Resize(9, 4);
 
-	int vvvv = vA[3];
+	int& vvvv = vA[3];
+
+	vvvv = 9999;
+	int vvvav = vA[3];
 
 }
 

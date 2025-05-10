@@ -59,15 +59,15 @@ namespace utl
 			capacity_ = src.capacity_;
 
 			// 新しいメモリを確保
-			void* newMem = alloc_.Allocate(capacity_);
-			assert(newMem != nullptr, "メモリを確保できませんでした");
-			Type* newBegin = static_cast<Type*>(newMem);
+			Type* newBegin = alloc_.Allocate<Type>(capacity_);
+			assert(newBegin != nullptr, "メモリを確保できませんでした");
 
 
 			for (size_t i = 0; i < size_; i++)
 			{
 				new (newBegin + i) Type(*(src.begin_ + i));
 			}
+			return *this;
 		}
 
 
@@ -93,6 +93,8 @@ namespace utl
 		/// <returns></returns>
 		Vector& operator =(Vector&& src)
 		{
+			Clear();
+
 			alloc_.Reset(src.alloc_.Get());
 			begin_ = src.begin_;
 			size_ = src.size_;
@@ -102,6 +104,8 @@ namespace utl
 			src.begin_ = nullptr;
 			src.size_ = 0;
 			src.capacity_ = 0;
+
+			return *this;
 		}
 
 		//------------------------------------------
@@ -174,24 +178,24 @@ namespace utl
 		// 取得
 		//------------------------------------------
 
-		Type* Get(const size_t index)
+		Type* Get(const size_t index)const
 		{
 			assert(index <= size_ && "範囲外アクセスです");
 
 			return begin_ + index;
 		}
 
-		Type& operator[](const size_t index)
+		Type& operator[](const size_t index)const
 		{
 			return *Get(index);
 		}
 
-		Type* Begin()
+		Type* Begin()const
 		{
 			return begin_;
 		}
 
-		Type* Back()
+		Type* Back()const
 		{
 			if (size_ == 0)
 			{
@@ -304,13 +308,12 @@ namespace utl
 			}
 
 			// 新しいメモリを確保
-			void* newMem = alloc_.Allocate<Type>(capacity);
-			assert(newMem != nullptr, "メモリを確保できませんでした");
-			if (newMem == nullptr)
+			Type* newBegin = alloc_.Allocate<Type>(capacity);
+			assert(newBegin != nullptr, "メモリを確保できませんでした");
+			if (newBegin == nullptr)
 			{
 				return;
 			}
-			Type* newBegin = static_cast<Type*>(newMem);
 
 			size_t afterSize = size_;
 			if (size_ > capacity)
