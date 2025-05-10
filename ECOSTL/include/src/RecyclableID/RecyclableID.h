@@ -54,9 +54,11 @@ namespace utl
 				recycleWaitIndeces_.Resize(recycleWaitIndeces_.Size() - 1);
 			}
 
-			// バージョンを更新する
+			// 添え字の情報を更新する
 			IDInfo& info = indexToInfo_[index];
+			info.activate = true;
 			version = ++info.version;
+
 
 
 			result.*indexPtr = static_cast<IndexType>(index);
@@ -73,6 +75,10 @@ namespace utl
 				return;
 			}
 
+			// 添え字を無効にし、添え字をリサイクル待ちリストに追加
+			IDInfo& info = indexToInfo_[index];
+			info.activate = false;
+			recycleWaitIndeces_.EmplaceBack(index);
 
 		}
 

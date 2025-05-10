@@ -61,8 +61,17 @@ TEST(DynamicArrayTest, TestName)
 	ResourceID rID;
 	allocator.Allocate(rID, &ResourceID::index, &ResourceID::version);
 	allocator.Allocate(rID, &ResourceID::index, &ResourceID::version);
+	allocator.Deallocate(rID.index, rID.version);
 	allocator.Allocate(rID, &ResourceID::index, &ResourceID::version);
 	allocator.Allocate(rID, &ResourceID::index, &ResourceID::version);
+	allocator.Deallocate(rID.index, rID.version);
+	allocator.Deallocate(rID.index, rID.version);
+	allocator.Allocate(rID, &ResourceID::index, &ResourceID::version);
+	allocator.Allocate(rID, &ResourceID::index, &ResourceID::version);
+	allocator.Allocate(rID, &ResourceID::index, &ResourceID::version);
+	allocator.Deallocate(rID.index, rID.version);
+	allocator.Allocate(rID, &ResourceID::index, &ResourceID::version);
+	allocator.Deallocate(rID.index, rID.version);
 	allocator.Allocate(rID, &ResourceID::index, &ResourceID::version);
 
 	allocator;
