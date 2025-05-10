@@ -162,6 +162,8 @@ namespace utl
 
 			new (ptr) Type(src);
 
+			++size_;
+
 			return ptr;
 		}
 
@@ -174,12 +176,13 @@ namespace utl
 				Reserve(capacity_ * 2);
 			}
 
-			const size_t insertIndex = size_++;
+			const size_t insertIndex = size_;
 
 			Type* ptr = begin_ + insertIndex;
 
 			new (ptr) Type(args...);
 
+			++size_;
 			return ptr;
 		}
 
