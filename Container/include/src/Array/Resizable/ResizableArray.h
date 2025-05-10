@@ -1,10 +1,10 @@
 #pragma once
 #include <cassert>
-#include <memory>
 #include "Memory.hpp"
 
 namespace utl
 {
+
 	/// <summary>
 	/// —v‘f”‚ğ•ÏX‚·‚é‚±‚Æ‚ª‚Å‚«‚é”z—ñ
 	/// </summary>
@@ -36,13 +36,12 @@ namespace utl
 
 			alloc_.Reset(alloc);
 			begin_ = alloc_.Allocate<Type>(size);
-			//begin_ = static_cast<Type*>(alloc_.Allocate(size * sizeof(Type)));
 			size_ = size;
 
 			for (size_t i = 0; i < size; ++i)
 			{
 				Type* ptr = begin_ + i;
-				new (ptr) Type(args...);
+				new (ptr) Type(Move(args...));
 			}
 		}
 
@@ -92,6 +91,8 @@ namespace utl
 
 		ResizableArray& operator=(ResizableArray&& src)noexcept
 		{
+			Reset();
+
 			alloc_.Reset(src.alloc_.Get());
 			begin_ = src.begin_;
 			size_ = src.Size();
@@ -218,13 +219,12 @@ namespace utl
 		}
 
 	private:
-
 		void MoveMem(Type* destBegin, Type* srcBegin, size_t size)
 		{
 			for (size_t i = 0; i < size; ++i)
 			{
 				Type* ptr = destBegin + i;
-				new (ptr) Type(*(srcBegin + i));
+				new (ptr) Type(Move(*(srcBegin + i)));
 			}
 		}
 	private:

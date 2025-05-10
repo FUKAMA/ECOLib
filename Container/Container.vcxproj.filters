@@ -36,6 +36,9 @@
     <ClInclude Include="include\src\Array\Dynamic\DynamicArray.h">
       <Filter>include\src\Array\Dynamic</Filter>
     </ClInclude>
+    <ClInclude Include="include\src\Vector\Vector.h">
+      <Filter>include\src\Vector</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\src\Array\Resizable\ResizableArray.cpp">

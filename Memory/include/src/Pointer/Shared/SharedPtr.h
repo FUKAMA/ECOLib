@@ -108,19 +108,18 @@ namespace utl
 		/// <summary>
 		/// 確保したインスタンスを開放する
 		/// </summary>
-		bool Reset()
+		void Reset()
 		{
 			if (counter_ > 0 || ptr_ == nullptr)
 			{
-				return false;
+				return;
 			}
 
 			ptr_->~Type();
-			alloc_.Deallocate(ptr_);
-			ptr_ = nullptr;
 			counter_ = 0;
+			alloc_.Deallocate(ptr_);
 
-			return true;
+			return;
 		}
 
 	private:
