@@ -142,7 +142,7 @@
       <OutputFile>$(SolutionDir)$(ProjectName)\build\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(ProjectName)\external\build\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Memory\build\$(Configuration)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>Memory.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
@@ -171,7 +171,7 @@
       <OutputFile>$(SolutionDir)$(ProjectName)\build\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(ProjectName)\external\build\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Memory\build\$(Configuration)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>Memory.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>

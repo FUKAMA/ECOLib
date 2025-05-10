@@ -135,6 +135,15 @@ namespace utl
 			capacity_ = 0;
 		}
 
+		void PopBack()
+		{
+			if (size_ == 0)
+			{
+				return;
+			}
+			Resize(size_ - 1);
+		}
+
 		//------------------------------------------
 		// 追加
 		//------------------------------------------
@@ -142,9 +151,9 @@ namespace utl
 		Type* PushBack(const Type& src)
 		{
 			// 容量が足りなければ確保する
-			if (capacity_ <= size_)
+			if (capacity_ <= size_ + 1)
 			{
-				Reserve(capacity_ * 2);
+				ReserveSlack(size_ + 1);
 			}
 
 			const size_t insertIndex = size_++;
@@ -229,15 +238,50 @@ namespace utl
 			// もしメモリが足りなければ確保
 			if (size > capacity_)
 			{
-				Reserve(size);
+				ReserveSlack(size);
 			}
 
 			// 要素数が増えたならその分を初期化
-			for (size_t i = size_; i < size; i++)
+			for (size_t i = size_; i < size; ++i)
 			{
 				Type* ptr = begin_ + i;
 				new (ptr)Type(args...);
 			}
+
+			// 要素数が減ったならその分開放
+			for (size_t i = size; i < size_; ++i)
+			{
+				Type* ptr = begin_ + i;
+				ptr->~Type();
+			}
+
+			size_ = size;
+		}
+
+		/// <summary>
+		/// いい感じに余裕をもってキャパシティを拡大する
+		/// </summary>
+		/// <param name="capacity"></param>
+		void ReserveSlack(const size_t capacity)
+		{
+			// 指定した容量が今と同じかそれ以下だったら何もしない
+			if (capacity_ >= capacity)
+			{
+				return;
+			}
+
+			size_t newCapacity = capacity_;
+			if (newCapacity == 0)
+			{
+				newCapacity = 1;
+			}
+			// 必要な容量より大きくなるまで繰り返す
+			while (newCapacity <= capacity)
+			{
+				newCapacity *= 2;
+			}
+
+			ChangeCapacity(newCapacity);
 		}
 
 		/// <summary>
@@ -335,7 +379,11 @@ namespace utl
 			}
 
 			// 前のメモリを開放し、新しいメモリをセット
-			alloc_.Deallocate(begin_);
+			if (begin_ != nullptr)
+			{
+				alloc_.Deallocate(begin_);
+				begin_ = nullptr;
+			}
 			begin_ = newBegin;
 			size_ = afterSize;
 			capacity_ = capacity;

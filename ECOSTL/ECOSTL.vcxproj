@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="include\ECOSTL.h" />
     <ClInclude Include="include\src\dummy.h" />
+    <ClInclude Include="include\src\RecyclableID\RecyclableID.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\src\dummy.cpp" />
@@ -126,7 +127,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(SolutionName)\include\;$(SolutionDir)$(SolutionName)\external\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Container\include\;$(SolutionDir)Memory\include\;$(SolutionDir)$(SolutionName)\include\;$(SolutionDir)$(SolutionName)\external\include\</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
@@ -138,7 +139,7 @@
       <OutputFile>$(SolutionDir)$(SolutionName)\build\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(ProjectName)\external\build\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)ECOSTL\build\$(Configuration)\;$(SolutionDir)TypeInfo\build\$(Configuration)\;$(SolutionDir)Container\build\$(Configuration)\;$(SolutionDir)Memory\build\$(Configuration)\;$(SolutionDir)$(ProjectName)\external\build\$(Configuration)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>Memory.lib;TypeInfo.lib;Container.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
@@ -153,7 +154,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(SolutionName)\include\;$(SolutionDir)$(SolutionName)\external\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Container\include\;$(SolutionDir)Memory\include\;$(SolutionDir)$(SolutionName)\include\;$(SolutionDir)$(SolutionName)\external\include\</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
@@ -167,7 +168,7 @@
       <OutputFile>$(SolutionDir)$(SolutionName)\build\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(ProjectName)\external\build\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)ECOSTL\build\$(Configuration)\;$(SolutionDir)TypeInfo\build\$(Configuration)\;$(SolutionDir)Container\build\$(Configuration)\;$(SolutionDir)Memory\build\$(Configuration)\;$(SolutionDir)$(ProjectName)\external\build\$(Configuration)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>Memory.lib;TypeInfo.lib;Container.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>

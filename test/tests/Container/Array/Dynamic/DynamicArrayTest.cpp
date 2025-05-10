@@ -1,6 +1,13 @@
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 
+struct ResourceID
+{
+	uint32_t index = 0;
+	uint16_t version = 0;
+	uint16_t type = 0;
+};
+
 TEST(DynamicArrayTest, TestName)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -14,18 +21,52 @@ TEST(DynamicArrayTest, TestName)
 
 	utl::Vector<int> vA;
 
-	vA.PushBack(1);
-	vA.PushBack(1);
-	vA.PushBack(1);
-	vA.EmplaceBack(1);
+	//vA.PushBack(1);
+	//vA.PushBack(1);
+	//vA.PushBack(1);
+	//vA.EmplaceBack(1);
 
-	vA.Resize(9, 14);
+	vA.Resize(0);
+	vA.Resize(1);
+	vA.Resize(2);
+	vA.Resize(3);
+	vA.Resize(4);
+	vA.Resize(5);
 	vA.Resize(9, 4);
+	vA.Resize(9, 100);
+
+
+
+	utl::Vector<utl::RecyclableIDAllocator::IDInfo> vFF;
+
+
+	//vFF.Resize(0);
+	vFF.Resize(1);
+	vFF.Resize(2);
+	vFF.Resize(3);
+	vFF.Resize(4);
+	vFF.Resize(5);
+	vFF.Resize(6);
 
 	int& vvvv = vA[3];
 
 	vvvv = 9999;
 	int vvvav = vA[3];
+
+	utl::RecyclableIDAllocator allocator;
+
+	auto id1 = allocator.Allocate();
+	auto id2 = allocator.Allocate();
+
+	ResourceID rID;
+	allocator.Allocate(rID, &ResourceID::index, &ResourceID::version);
+	allocator.Allocate(rID, &ResourceID::index, &ResourceID::version);
+	allocator.Allocate(rID, &ResourceID::index, &ResourceID::version);
+	allocator.Allocate(rID, &ResourceID::index, &ResourceID::version);
+	allocator.Allocate(rID, &ResourceID::index, &ResourceID::version);
+
+	allocator;
+
 
 }
 

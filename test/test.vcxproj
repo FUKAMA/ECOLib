@@ -64,15 +64,15 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Container\include\;$(SolutionDir)Memory\include\;$(SolusionDir)$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ECOSTL\include\;$(SolutionDir)Container\include\;$(SolutionDir)Memory\include\;$(SolusionDir)$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)Memory\build\$(Configuration)\;$(SolutionDir)Logger\build\$(Configuration)\;$(SolutionDir)Container\build\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Container.lib;Memory.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Memory\build\$(Configuration)\;$(SolutionDir)Logger\build\$(Configuration)\;$(SolutionDir)ECOSTL\build\$(Configuration)\;$(SolutionDir)Container\build\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Container.lib;Memory.lib;ECOSTL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -100,7 +100,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Container\include\;$(SolutionDir)Memory\include\;$(SolusionDir)$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ECOSTL\include\;$(SolutionDir)Container\include\;$(SolutionDir)Memory\include\;$(SolusionDir)$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
     </ClCompile>
@@ -109,8 +109,8 @@
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <AdditionalLibraryDirectories>$(SolutionDir)Memory\build\$(Configuration)\;$(SolutionDir)Logger\build\$(Configuration)\;$(SolutionDir)Container\build\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Container.lib;Memory.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Memory\build\$(Configuration)\;$(SolutionDir)Logger\build\$(Configuration)\;$(SolutionDir)ECOSTL\build\$(Configuration)\;$(SolutionDir)Container\build\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Container.lib;Memory.lib;ECOSTL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
