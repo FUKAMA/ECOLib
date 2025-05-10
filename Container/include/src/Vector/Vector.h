@@ -59,13 +59,13 @@ namespace utl
 			capacity_ = src.capacity_;
 
 			// 新しいメモリを確保
-			Type* newBegin = alloc_.Allocate<Type>(capacity_);
-			assert(newBegin != nullptr, "メモリを確保できませんでした");
+			begin_ = alloc_.Allocate<Type>(capacity_);
+			assert(begin_ != nullptr, "メモリを確保できませんでした");
 
 
 			for (size_t i = 0; i < size_; i++)
 			{
-				new (newBegin + i) Type(*(src.begin_ + i));
+				new (begin_ + i) Type(*(src.begin_ + i));
 			}
 			return *this;
 		}
