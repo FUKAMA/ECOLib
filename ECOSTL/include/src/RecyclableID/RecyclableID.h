@@ -4,6 +4,12 @@
 
 namespace utl
 {
+	struct RecyclableID
+	{
+		uint32_t index = 0;
+		uint32_t version = 0;
+	};
+
 	class RecyclableIDAllocator
 	{
 	private:
@@ -12,12 +18,6 @@ namespace utl
 		{
 			uint32_t version = 0;
 			bool activate = false;
-		};
-
-		struct AllocateResult
-		{
-			uint32_t index = 0;
-			uint32_t version = 0;
 		};
 
 	public:
@@ -29,10 +29,10 @@ namespace utl
 
 		}
 
-		AllocateResult Allocate()
+		RecyclableID Allocate()
 		{
-			AllocateResult result;
-			Allocate(result, &AllocateResult::index, &AllocateResult::version);
+			RecyclableID result;
+			Allocate(result, &RecyclableID::index, &RecyclableID::version);
 			return result;
 		}
 
@@ -65,6 +65,11 @@ namespace utl
 			result.*versionPtr = static_cast<VersionType>(version);
 
 
+		}
+
+		void Deallocate(const RecyclableID& id)
+		{
+			Deallocate(id.index, id.version);
 		}
 
 		void Deallocate(const uint32_t index, const uint32_t version)
