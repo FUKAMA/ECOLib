@@ -1,5 +1,5 @@
 #pragma once
-#include "Vector.h"
+#include "../Vector/Vector.h"
 
 namespace utl
 {
@@ -10,7 +10,7 @@ namespace utl
 	/// <summary>
 	/// 連番の整数をキーとし、削除するときに最後の要素を削除する要素に上書きするテーブル
 	/// </summary>
-	class SwapTable
+	class DenceTable
 	{
 		struct KeyIndex
 		{
@@ -23,9 +23,9 @@ namespace utl
 		// 作成
 		//-----------------------------------
 
-		SwapTable()
-			:linkInfo_()
-			,size_(0)
+		DenceTable(IMemoryAllocator* alloc = nullptr)
+			:linkInfo_(alloc)
+			, size_(0)
 		{
 
 		}
@@ -34,7 +34,7 @@ namespace utl
 		// 開放
 		//-----------------------------------
 
-		~SwapTable()
+		~DenceTable()
 		{
 			Reset();
 		}
@@ -141,15 +141,42 @@ namespace utl
 	};
 
 	template<typename Type>
-	class VectorMap
+	class DenceMap
 	{
 	public:
+		//------------------------------------------
+		// 作成
+		//------------------------------------------
+
+		DenceMap(IMemoryAllocator* alloc = nullptr)
+			:table_(alloc)
+			, values_(alloc)
+		{
+
+		}
+		DenceMap(const size_t capacity, IMemoryAllocator* alloc = nullptr)
+			:table_(alloc)
+			, values_(capacity, alloc)
+		{
+
+		}
+
+		//------------------------------------------
+		// 追加
+		//------------------------------------------
+
+		//------------------------------------------
+		// 削除
+		//------------------------------------------
+
 
 
 
 	private:
 
+		DenceTable table_;
 
+		Vector<Type> values_;
 
 	};
 }
