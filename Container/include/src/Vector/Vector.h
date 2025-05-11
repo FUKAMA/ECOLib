@@ -249,6 +249,22 @@ namespace utl
 		// メモリ操作
 		//------------------------------------------
 
+		size_t GetSlack(const size_t begin, const size_t goal)const
+		{
+			size_t newCapacity = begin;
+			if (begin == 0)
+			{
+				newCapacity = 1;
+			}
+			// 必要な容量より大きくなるまで繰り返す
+			while (newCapacity <= goal)
+			{
+				// 今の値と今の値を半減した値を足した数をセット
+				newCapacity = newCapacity + (newCapacity >> 1);
+			}
+			return newCapacity;
+		}
+
 		template<typename...ArgTypes>
 		void Resize(const size_t size, ArgTypes&&...args)
 		{
@@ -276,6 +292,23 @@ namespace utl
 		}
 
 		/// <summary>
+		/// キャパシティを要素数にいい感じに合わせる
+		/// </summary>
+		void FitSlack()
+		{
+			size_t newCapacity = GetSlack(1, size_);
+			ChangeCapacity(newCapacity);
+		}
+
+		/// <summary>
+		/// キャパシティを要素数に合わせる
+		/// </summary>
+		void Fit()
+		{
+			ChangeCapacity(size_);
+		}
+
+		/// <summary>
 		/// いい感じに余裕をもってキャパシティを拡大する
 		/// </summary>
 		/// <param name="capacity"></param>
@@ -287,17 +320,7 @@ namespace utl
 				return;
 			}
 
-			size_t newCapacity = capacity_;
-			if (newCapacity == 0)
-			{
-				newCapacity = 1;
-			}
-			// 必要な容量より大きくなるまで繰り返す
-			while (newCapacity <= capacity)
-			{
-				newCapacity *= 2;
-			}
-
+			size_t newCapacity = GetSlack(capacity_, capacity);
 			ChangeCapacity(newCapacity);
 		}
 
