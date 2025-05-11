@@ -252,9 +252,9 @@ namespace utl
 		size_t GetSlack(const size_t begin, const size_t goal)const
 		{
 			size_t newCapacity = begin;
-			if (begin == 0)
+			if (begin < 2)
 			{
-				newCapacity = 1;
+				newCapacity = 2;
 			}
 			// •K—v‚È—e—Ê‚æ‚è‘å‚«‚­‚È‚é‚Ü‚ÅŒJ‚è•Ô‚·
 			while (newCapacity <= goal)
