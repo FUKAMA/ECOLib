@@ -9,7 +9,8 @@
 #include "src/Array/Resizable/ResizableArray.h"
 
 //-----------------------------
-// V
+// Vector
 //-----------------------------
 
 #include "src/Vector/Vector.h"
+#include "src/Vector/VectorMap.h"

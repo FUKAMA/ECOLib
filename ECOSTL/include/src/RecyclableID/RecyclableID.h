@@ -59,12 +59,8 @@ namespace utl
 			info.activate = true;
 			version = ++info.version;
 
-
-
 			result.*indexPtr = static_cast<IndexType>(index);
 			result.*versionPtr = static_cast<VersionType>(version);
-
-
 		}
 
 		void Deallocate(const RecyclableID& id)

@@ -231,6 +231,20 @@ namespace utl
 			return size_ == 0;
 		}
 
+		/// <summary>
+		/// ˆø”‚Ì“Y‚¦š‚ª”ÍˆÍ“à‚©•Ô‚·ŠÖ”
+		/// </summary>
+		/// <param name="index"></param>
+		/// <returns></returns>
+		bool IsContain(const size_t index)const
+		{
+			if (index >= size_)
+			{
+				return false;
+			}
+			return true;
+		}
+
 		//------------------------------------------
 		// ƒƒ‚ƒŠ‘€ì
 		//------------------------------------------

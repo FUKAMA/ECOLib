@@ -24,6 +24,7 @@
     <ClInclude Include="include\src\Array\Resizable\ResizableArray.h" />
     <ClInclude Include="include\src\Array\Static\StaticArray.h" />
     <ClInclude Include="include\src\Vector\Vector.h" />
+    <ClInclude Include="include\src\Vector\VectorMap.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\src\Array\Dynamic\DynamicArray.cpp" />
