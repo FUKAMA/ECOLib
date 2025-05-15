@@ -8,6 +8,8 @@ struct ResourceID
 	uint16_t type = 0;
 };
 
+
+
 TEST(DynamicArrayTest, TestName)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);

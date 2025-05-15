@@ -1,5 +1,5 @@
 # ビルド関連
-build/
+# build/
 vs/
 lib/
 external/
