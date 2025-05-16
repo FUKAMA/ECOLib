@@ -11,38 +11,73 @@ namespace utl
 	/// <summary>
 	/// 連番の整数をキーとし、削除するときに最後の要素を削除する要素に上書きするテーブル
 	/// </summary>
-	class DenceTable
+	class SparseSet
 	{
-		struct KeyIndex
-		{
-			DenceKey key = NULL_DENCE;
-			DenceIndex index = NULL_DENCE;
-		};
+	private:
+		//struct KeyIndex
+		//{
+		//	DenceKey key = NULL_DENCE;
+		//	DenceIndex index = NULL_DENCE;
+		//};
 	public:
 
 		//-----------------------------------
 		// 作成
 		//-----------------------------------
 
-		DenceTable(IMemoryAllocator* alloc = nullptr)
-			:linkInfo_(alloc)
+		SparseSet(IMemoryAllocator* alloc = nullptr)
+			//:denceSparce_(alloc)
+			:indexToKey_(alloc)
+			, keyToIndex_(alloc)
 			, size_(0)
 		{
 			// clang
+		}
+
+		SparseSet(const SparseSet& src)
+			:indexToKey_(src.indexToKey_)
+			, keyToIndex_(src.keyToIndex_)
+			, size_(src.size_)
+		{
+
+		}
+		SparseSet& operator=(const SparseSet& src)
+		{
+			Reset();
+			indexToKey_ = src.indexToKey_;
+			keyToIndex_ = src.keyToIndex_;
+			size_ = src.size_;
+		}
+
+		SparseSet(SparseSet&& src)noexcept
+			:indexToKey_(src.indexToKey_)
+			, keyToIndex_(src.keyToIndex_)
+			, size_(src.size_)
+		{
+
+		}
+		SparseSet& operator=(SparseSet&& src)noexcept
+		{
+			Reset();
+			indexToKey_ = src.indexToKey_;
+			keyToIndex_ = src.keyToIndex_;
+			size_ = src.size_;
 		}
 
 		//-----------------------------------
 		// 開放
 		//-----------------------------------
 
-		~DenceTable()
+		~SparseSet()
 		{
 			Reset();
 		}
 
 		void Reset()
 		{
-			linkInfo_.Clear();
+			//denceSparce_.Clear();
+			keyToIndex_.Clear();
+			indexToKey_.Clear();
 			size_ = 0;
 		}
 
@@ -56,23 +91,25 @@ namespace utl
 			// すでに追加済みのキーならそのまま返す
 			if (CheckActive(key))
 			{
-				KeyIndex& info = linkInfo_[key];
-				return info.index;
-			}
-			if (key == NULL_DENCE)
-			{
-				return NULL_DENCE;
+				return keyToIndex_[key];
+				//KeyIndex& info = denceSparce_[key];
+				//return info.index;
 			}
 
 			// 添え字を求めた後に要素数を増加
 			DenceIndex index = size_++;
 
 			// まだ追加してなければ追加
-			linkInfo_.Resize(key + 1);
-			KeyIndex& keyInfo = linkInfo_[key];
-			KeyIndex& indexInfo = linkInfo_[index];
-			keyInfo.index = index;
-			indexInfo.key = key;
+			if (!keyToIndex_.IsContain(key))
+			{
+				keyToIndex_.Resize(key + 1, NULL_DENCE);
+			}
+			if (!indexToKey_.IsContain(index))
+			{
+				indexToKey_.Resize(index + 1, NULL_DENCE);
+			}
+			keyToIndex_[key] = index;
+			indexToKey_[index] = key;
 
 			return index;
 		}
@@ -92,30 +129,44 @@ namespace utl
 			{
 				return false;
 			}
-			if (!linkInfo_.IsContain(key))
+			if (!keyToIndex_.IsContain(key))
+				//if (!denceSparce_.IsContain(key))
 			{
 				return false;
 			}
-			return linkInfo_[key].index != NULL_DENCE;
+			if (!indexToKey_.IsContain(keyToIndex_[key]))
+				//if (!denceSparce_.IsContain(key))
+			{
+				return false;
+			}
+			//return denceSparce_[key].index != NULL_DENCE;
+			return keyToIndex_[key] != NULL_DENCE;
 		}
 
 		DenceIndex GetIndex(const DenceKey key)const
 		{
-			if (!CheckActive(key))
+			if (!keyToIndex_.IsContain(key))
 			{
 				return NULL_DENCE;
 			}
-			return linkInfo_[key].index;
+			//if (!CheckActive(key))
+			//{
+			//	return NULL_DENCE;
+			//}
+			return keyToIndex_[key];
+			//return denceSparce_[key].index;
 		}
 
 		DenceKey GetKey(const DenceIndex index)const
 		{
-			if (!linkInfo_.IsContain(index))
+			//if (!denceSparce_.IsContain(index))
+			if (!keyToIndex_.IsContain(index))
 			{
 				return NULL_DENCE;
 			}
 
-			return linkInfo_[index].key;
+			return keyToIndex_[index];
+			//return denceSparce_[index].key;
 		}
 
 		size_t Size()const
@@ -129,12 +180,16 @@ namespace utl
 
 		void FitSlack()
 		{
-			linkInfo_.FitSlack();
+			//denceSparce_.FitSlack();
+			indexToKey_.FitSlack();
+			keyToIndex_.FitSlack();
 		}
 
 		void Fit()
 		{
-			linkInfo_.Fit();
+			//denceSparce_.Fit();
+			indexToKey_.Fit();
+			keyToIndex_.Fit();
 		}
 
 		//-----------------------------------
@@ -148,22 +203,28 @@ namespace utl
 				return NULL_DENCE;
 			}
 
-			const DenceIndex removeIndex = linkInfo_[removeKey].index;
+			const DenceIndex removeIndex = keyToIndex_[removeKey];
+			//const DenceIndex removeIndex = denceSparce_[removeKey].index;
 
 			const DenceIndex backIndex = size_ - 1;
-			const DenceKey backKey = linkInfo_[backIndex].key;
+			const DenceKey backKey = indexToKey_[backIndex];
+			//const DenceKey backKey = denceSparce_[backIndex].key;
 
 			// 削除する要素の添え字と最後の要素の添え字が異なれば、
 			if (removeIndex != backIndex)
 			{
 				// 削除する要素に最後の要素を張り付ける
-				linkInfo_[removeIndex].key = backKey;
-				linkInfo_[backKey].index = removeIndex;
+				indexToKey_[removeIndex] = backKey;
+				keyToIndex_[backKey] = removeIndex;
+				//denceSparce_[removeIndex].key = backKey;
+				//denceSparce_[backKey].index = removeIndex;
 			}
 
 			// 削除する要素のキーと添え字を無効化
-			linkInfo_[removeKey].index = NULL_DENCE;
-			linkInfo_[backIndex].key = NULL_DENCE;
+			keyToIndex_[removeKey] = NULL_DENCE;
+			indexToKey_[backIndex] = NULL_DENCE;
+			//denceSparce_[removeKey].index = NULL_DENCE;
+			//denceSparce_[backIndex].key = NULL_DENCE;
 			--size_;
 
 			// 位置が移動した可能性がある最後の要素の添え字を返す
@@ -173,7 +234,9 @@ namespace utl
 	private:
 
 		// KeyToIndexとIndexToKeyを兼ねるコンテナ
-		Vector<KeyIndex> linkInfo_;
+		//Vector<KeyIndex> denceSparce_;
+		Vector<DenceIndex> keyToIndex_;
+		Vector<DenceKey> indexToKey_;
 		// 登録したキーの数
 		size_t size_;
 
@@ -307,14 +370,14 @@ namespace utl
 			index = table_.Insert(key);
 			// 要素をコンテナに追加
 			// 有効な要素は前詰めで配置されるため、末尾に追加すればいい
-			return values_.EmplaceBack();
+			return *values_.EmplaceBack();
 		}
 
 
 
 	private:
 
-		DenceTable table_;
+		SparseSet table_;
 
 		Vector<Type> values_;
 

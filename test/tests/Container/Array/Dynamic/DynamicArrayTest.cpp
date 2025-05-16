@@ -39,16 +39,16 @@ TEST(DynamicArrayTest, TestName)
 
 
 
-	utl::Vector<utl::RecyclableIDAllocator::IDInfo> vFF;
+	//utl::Vector<utl::RecyclableIDAllocator::IDInfo> vFF;
 
 
 	//vFF.Resize(0);
-	vFF.Resize(1);
-	vFF.Resize(2);
-	vFF.Resize(3);
-	vFF.Resize(4);
-	vFF.Resize(5);
-	vFF.Resize(6);
+	//vFF.Resize(1);
+	//vFF.Resize(2);
+	//vFF.Resize(3);
+	//vFF.Resize(4);
+	//vFF.Resize(5);
+	//vFF.Resize(6);
 
 	int& vvvv = vA[3];
 
@@ -78,6 +78,52 @@ TEST(DynamicArrayTest, TestName)
 
 	allocator;
 
+
+	utl::DenceMap<int> dmAAAA;
+
+	dmAAAA[100] = 20;
+	dmAAAA[2] = 30;
+	dmAAAA[3] = 40;
+	dmAAAA[3000] = 50;
+
+	{
+		int bbbb = dmAAAA[100];
+		int aaaa = dmAAAA[2];
+		int cccc = dmAAAA[3];
+		int dddd = dmAAAA[3000];
+	}
+	dmAAAA.Remove(2);
+	dmAAAA.Remove(3);
+	{
+		int bbbb = dmAAAA[100];
+		int*aaaa = dmAAAA.Get(2);
+		int*cccc = dmAAAA.Get(3);
+		int*gf = dmAAAA.Get(3000);
+		//int aaaa = dmAAAA[2];
+		//int cccc = dmAAAA[3];
+		int dddd = dmAAAA[3000];
+	}
+	dmAAAA.FitSlack();
+	{
+		int bbbb = dmAAAA[100];
+		int*aaaa = dmAAAA.Get(2);
+		int*cccc = dmAAAA.Get(3);
+		int*gf = dmAAAA.Get(3000);
+		//int aaaa = dmAAAA[2];
+		//int cccc = dmAAAA[3];
+		int dddd = dmAAAA[3000];
+	}
+	dmAAAA.Fit();
+	{
+		int bbbb = dmAAAA[100];
+		int*aaaa = dmAAAA.Get(2);
+		int hhh = dmAAAA[2];
+		int*cccc = dmAAAA.Get(3);
+		int*gf = dmAAAA.Get(3000);
+		//int aaaa = dmAAAA[2];
+		//int cccc = dmAAAA[3];
+		int dddd = dmAAAA[3000];
+	}
 
 }
 

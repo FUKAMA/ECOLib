@@ -13,7 +13,6 @@ namespace utl
 	class RecyclableIDAllocator
 	{
 	private:
-	public:
 		struct IDInfo
 		{
 			uint32_t version = 0;
@@ -26,7 +25,6 @@ namespace utl
 		RecyclableIDAllocator()
 			:nextGeneIndex_(0)
 		{
-
 		}
 
 		RecyclableID Allocate()
@@ -36,6 +34,15 @@ namespace utl
 			return result;
 		}
 
+		/// <summary>
+		/// 再利用可能なIDを生成し、任意の型の任意の変数にセットする
+		/// </summary>
+		/// <typeparam name="IDType"></typeparam>
+		/// <typeparam name="IndexType"></typeparam>
+		/// <typeparam name="VersionType"></typeparam>
+		/// <param name="result"></param>
+		/// <param name="indexPtr"></param>
+		/// <param name="versionPtr"></param>
 		template<typename IDType, typename IndexType, typename VersionType>
 		void Allocate(IDType& result, IndexType IDType::* indexPtr, VersionType IDType::* versionPtr)
 		{
