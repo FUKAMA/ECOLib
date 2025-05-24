@@ -24,6 +24,7 @@
     <ClInclude Include="include\src\Array\Resizable\ResizableArray.h" />
     <ClInclude Include="include\src\Array\Static\StaticArray.h" />
     <ClInclude Include="include\src\Map\DenceMap.h" />
+    <ClInclude Include="include\src\Set\SparseSet.h" />
     <ClInclude Include="include\src\Vector\Vector.h" />
   </ItemGroup>
   <ItemGroup>

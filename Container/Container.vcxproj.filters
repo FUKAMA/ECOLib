@@ -25,6 +25,9 @@
     <Filter Include="include\src\Map">
       <UniqueIdentifier>{ea64aa1c-334a-4d5c-aeaa-cb99179aad88}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\src\Set">
+      <UniqueIdentifier>{651b55c7-5063-41e4-b2ea-e2e0d211ffa0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Container.hpp">
@@ -44,6 +47,9 @@
     </ClInclude>
     <ClInclude Include="include\src\Map\DenceMap.h">
       <Filter>include\src\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="include\src\Set\SparseSet.h">
+      <Filter>include\src\Set</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
