@@ -96,9 +96,9 @@ TEST(DynamicArrayTest, TestName)
 	dmAAAA.Remove(3);
 	{
 		int bbbb = dmAAAA[100];
-		int*aaaa = dmAAAA.Get(2);
-		int*cccc = dmAAAA.Get(3);
-		int*gf = dmAAAA.Get(3000);
+		int* aaaa = dmAAAA.Get(2);
+		int* cccc = dmAAAA.Get(3);
+		int* gf = dmAAAA.Get(3000);
 		//int aaaa = dmAAAA[2];
 		//int cccc = dmAAAA[3];
 		int dddd = dmAAAA[3000];
@@ -106,9 +106,9 @@ TEST(DynamicArrayTest, TestName)
 	dmAAAA.FitSlack();
 	{
 		int bbbb = dmAAAA[100];
-		int*aaaa = dmAAAA.Get(2);
-		int*cccc = dmAAAA.Get(3);
-		int*gf = dmAAAA.Get(3000);
+		int* aaaa = dmAAAA.Get(2);
+		int* cccc = dmAAAA.Get(3);
+		int* gf = dmAAAA.Get(3000);
 		//int aaaa = dmAAAA[2];
 		//int cccc = dmAAAA[3];
 		int dddd = dmAAAA[3000];
@@ -116,13 +116,63 @@ TEST(DynamicArrayTest, TestName)
 	dmAAAA.Fit();
 	{
 		int bbbb = dmAAAA[100];
-		int*aaaa = dmAAAA.Get(2);
+		int* aaaa = dmAAAA.Get(2);
 		int hhh = dmAAAA[2];
-		int*cccc = dmAAAA.Get(3);
-		int*gf = dmAAAA.Get(3000);
+		int* cccc = dmAAAA.Get(3);
+		int* gf = dmAAAA.Get(3000);
 		//int aaaa = dmAAAA[2];
 		//int cccc = dmAAAA[3];
 		int dddd = dmAAAA[3000];
 	}
+
+	{
+		size_t aaaaaaa = 25 / 8;
+		utl::BitSet<256, uint8_t> aaa;
+		utl::BitSet<8, uint8_t> aaa8;
+		size_t size = sizeof(utl::BitSet<87, uint8_t>);
+		size = sizeof(utl::BitSet<3, uint8_t>);
+		size = sizeof(utl::BitSet<256, uint8_t>);
+		size = sizeof(utl::BitSet<256, uint8_t>);
+	}
+	{
+		utl::BitSet<256> aaa1;
+		utl::BitSet<256> aaa2;
+		utl::BitSet<8> aaa8;
+		aaa8.Set(2);
+
+		EXPECT_EQ(true, aaa1 == aaa2);
+		EXPECT_EQ(false, aaa1 != aaa2);
+		aaa1.Set(2);
+		EXPECT_EQ(false, aaa1 == aaa2);
+		EXPECT_EQ(true, aaa1 != aaa2);
+
+		if (aaa1 == aaa2)
+		{
+			int fds = 9;
+		}
+		if (aaa1 == aaa2)
+		{
+			int fds = 9;
+		}
+
+		size_t size = sizeof(utl::BitSet<87>);
+		size = sizeof(utl::BitSet<256>);
+		size = sizeof(utl::BitSet<256>);
+	}
+
+	utl::ResizableBitSet<256> bs1;
+	utl::ResizableBitSet<256> bs2;
+	utl::ResizableBitSet<256> bs3;
+	EXPECT_EQ(true, bs1 == bs1);
+	bs1.Set(10000);
+	bs1.Reset(10000);
+	EXPECT_EQ(false, bs1.Test(10000));
+	bs1.Set(10000);
+	EXPECT_EQ(true, bs1.Test(10000));
+	EXPECT_EQ(true, bs1.IsContain(bs1));
+	EXPECT_EQ(true, bs1.IsContain(bs2));
+	EXPECT_EQ(false, bs2.IsContain(bs1));
+	
+
 }
 
