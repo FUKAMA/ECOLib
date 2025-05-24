@@ -4,161 +4,40 @@
 
 namespace utl
 {
-	template<typename Type>
-	class SharedPtr;
 
-	/// <summary>
-	/// 参照カウンタとオブジェクトのポインタを管理するクラス
-	/// 管理するオブジェクトとこのインスタンスを格納するメモリは引数で渡すMemoryAllocatorで作成する
-	/// このクラスのインスタンスを開放するときは、コンストラクタに渡したメモリアロケータで開放する必要がある
-	/// </summary>
-	/// <typeparam name="Type"></typeparam>
-	template<typename Type>
-	class RefCounter
+	struct RefCounter
 	{
-	private:
-		//---------------------------------
-		// 作成
-		//---------------------------------
+		RefCounter() = default;
 
-		template<typename T, typename...ArgTypes>
-		friend RefCounter<T>* MakeRefCounterWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args);
-
-		/// <summary>
-		/// 有効なRefCounterを作成するコンストラクタ
-		/// MakeRefCounterWithAllocから作成されることを想定している。
-		/// </summary>
-		/// <param name="ptr"></param>
-		/// <param name="alloc"></param>
-		RefCounter(Type* ptr, IMemoryAllocator* alloc)
-			:ptr_(ptr)
+		RefCounter(void* ptr, size_t size, IMemoryAllocator* alloc)
+			: ptr_(ptr)
 			, alloc_(alloc)
+			, size_(size)
 			, counter_(0)
 		{
 
 		}
 
-	public:
+		void* ptr_;
 
-		/// <summary>
-		/// 空のRefCounterを作成するコンストラクタ
-		/// </summary>
-		RefCounter()
-			:ptr_(nullptr)
-			, alloc_(nullptr)
-			, counter_(0)
-		{
-
-		}
-
-		//---------------------------------
-		// 開放
-		//---------------------------------
-
-		~RefCounter() = default;
-
-		//---------------------------------
-		// カウント
-		//---------------------------------
-
-		/// <summary>
-		/// 参照カウンタを増加
-		/// </summary>
-		void Look()
-		{
-			++counter_;
-		}
-
-		/// <summary>
-		/// 参照カウンタを現象
-		/// メモリの開放は外部に任せる
-		/// </summary>
-		void UnLook()
-		{
-			--counter_;
-		}
-
-		/// <summary>
-		/// 現在参照している数を返す
-		/// </summary>
-		/// <returns></returns>
-		int Counter()const
-		{
-			return counter_;
-		}
-
-		/// <summary>
-		/// 管理してるインスタンスのポインタを取得
-		/// </summary>
-		/// <returns></returns>
-		Type* GetPtr()const
-		{
-			return ptr_;
-		}
-
-		/// <summary>
-		/// このクラスと管理してるインスタンスのメモリを管理するアロケータのポインタを取得
-		/// </summary>
-		/// <returns></returns>
-		MemoryAllocatorHolder& GetAlloc()
-		{
-			return alloc_;
-		}
-
-		/// <summary>
-		/// 確保したインスタンスを開放する
-		/// </summary>
-		void Reset()
-		{
-			if (counter_ > 0 || ptr_ == nullptr)
-			{
-				return;
-			}
-
-			ptr_->~Type();
-			counter_ = 0;
-			alloc_.Deallocate(ptr_);
-
-			return;
-		}
-
-	private:
-
-		Type* ptr_;
+		size_t size_;
 
 		MemoryAllocatorHolder alloc_;
 
 		int counter_;
-
 	};
-
-	/// <summary>
-	/// 参照カウンタとインスタンスのメモリを並べて配置するための構造体
-	/// ポインタとしてのみの利用を目的とし、インスタンス化は許さない
-	/// Typeのインスタンスを開放したら両方開放されるようにInsを先頭に配置
-	/// </summary>
-	/// <typeparam name="Type"></typeparam>
 	template<typename Type>
-	class RefCounterToIns
+	struct RefCounterToIns
 	{
 	public:
 		RefCounterToIns() = delete;
 
 		Type ins;
-		RefCounter<Type> typeCounter;
+		RefCounter typeCounter;
 	};
 
-	/// <summary>
-	/// メモリアロケータを使ってRefCounterを作成する関数
-	/// RefCounterとRefCounterが管理するインスタンスの両方をメモリアロケータで確保したメモリに配置する
-	/// </summary>
-	/// <typeparam name="Type"></typeparam>
-	/// <typeparam name="...ArgTypes"></typeparam>
-	/// <param name="alloc"></param>
-	/// <param name="...args"></param>
-	/// <returns></returns>
 	template<typename Type, typename...ArgTypes>
-	inline RefCounter<Type>* MakeRefCounterWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args)
+	inline RefCounter* MakeRefCounterWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args)
 	{
 		MemoryAllocatorHolder allocHolder(alloc);
 
@@ -167,11 +46,10 @@ namespace utl
 		RefCounterToIns<Type>* allocResult = static_cast<RefCounterToIns<Type>*>(mem);
 		// 確保したメモリにインスタンスを作成
 		new (&allocResult->ins) Type(args...);
-		new (&allocResult->typeCounter) RefCounter<Type>(&allocResult->ins, alloc);
+		new (&allocResult->typeCounter) RefCounter(&allocResult->ins, sizeof(Type), alloc);
 
 		return &allocResult->typeCounter;
 	}
-
 	/// <summary>
 	/// 共有ポインタ
 	/// </summary>
@@ -180,22 +58,29 @@ namespace utl
 	class SharedPtr
 	{
 	private:
+		template<typename SrcType>
+		friend class SharedPtr;
+
+
+
+
+	private:
 
 		//---------------------------------
 		// 作成
 		//---------------------------------
 
-		template<typename T, typename...ArgTypes>
-		friend SharedPtr<T> MakeSharedWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args);
+		template<typename SrcType, typename...ArgTypes>
+		friend SharedPtr<SrcType> MakeSharedWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args);
 
 		/// <summary>
 		/// リソースのカウンタを渡して作成するコンストラクタ
 		/// </summary>
 		/// <param name="ref"></param>
-		SharedPtr(RefCounter<Type>* ref)
+		SharedPtr(RefCounter* ref)
 			:ref_(ref)
 		{
-			ref->Look();
+			++ref->counter_;
 		}
 
 	public:
@@ -214,6 +99,8 @@ namespace utl
 		// 代入
 		//---------------------------------
 
+
+
 		/// <summary>
 		/// 共有ポインタをコピーして作成するコンストラクタ
 		/// 共有カウントは増える
@@ -227,7 +114,7 @@ namespace utl
 				return;
 			}
 
-			ref_->Look();
+			++ref_->counter_;
 		}
 		/// <summary>
 		/// 共有ポインタをコピーする
@@ -253,26 +140,26 @@ namespace utl
 				return *this;
 			}
 
-			ref_->Look();
+			++ref_->counter_;
 			return *this;
 		}
 
+
 		/// <summary>
-		/// 共有ポインタの所有権を移動して作成するコンストラクタ
+		/// 派生クラスからキャストしてムーブ
 		/// </summary>
-		/// <param name="src"></param>
-		SharedPtr(SharedPtr<Type>&& src)noexcept
-			:ref_(src.ref_)
+		/// <typeparam name="BaseType"></typeparam>
+		/// <param name=""></param>
+		template<typename SubType, std::enable_if_t<std::is_convertible_v<SubType*, Type*>, int> = 0>
+		SharedPtr(SharedPtr<SubType>&& src) noexcept
+			:ref_(nullptr)
 		{
+			ref_ = src.ref_;
 			src.ref_ = nullptr;
 		}
-		/// <summary>
-		/// 共有ポインタの所有権を移動する
-		/// すでに管理してたら参照を外す
-		/// </summary>
-		/// <param name="src"></param>
-		/// <returns></returns>
-		SharedPtr<Type>& operator=(SharedPtr<Type>&& src)noexcept
+
+		template<typename SubType, std::enable_if_t<std::is_convertible_v<SubType*, Type*>, int> = 0>
+		SharedPtr& operator=(SharedPtr<SubType>&& src)noexcept
 		{
 			// すでに扱ってるリソースがあったら開放
 			Reset();
@@ -283,6 +170,16 @@ namespace utl
 		}
 
 
+		SharedPtr(nullptr_t)noexcept
+			:ref_(nullptr)
+		{
+
+		}
+		SharedPtr& operator=(nullptr_t)noexcept
+		{
+			Reset();
+			return *this;
+		}
 		//---------------------------------
 		// 開放
 		//---------------------------------
@@ -298,12 +195,13 @@ namespace utl
 				return;
 			}
 
-			ref_->UnLook();
+			--ref_->counter_;
 
 			// カウンタが０以下になったらインスタンスを開放する
-			if (ref_->Counter() <= 0)
+			if (ref_->counter_ <= 0)
 			{
-				ref_->Reset();
+				// Ref事態も同じアロケータの同じメモリブロックに制しえされているためこれでまとめて開放
+				ref_->alloc_.Deallocate(ref_->ptr_);
 			}
 
 			ref_ = nullptr;
@@ -328,7 +226,7 @@ namespace utl
 			{
 				return nullptr;
 			}
-			return ref_->GetPtr();
+			return static_cast<Type*>(ref_->ptr_);
 		}
 
 		/// <summary>
@@ -338,7 +236,7 @@ namespace utl
 		Type* operator->()const
 		{
 			assert(ref_ != nullptr && "nullptrの実体にアクセスしようとしています");
-			assert(ref_->GetPtr() != nullptr && "nullptrの実体にアクセスしようとしています");
+			assert(ref_->ptr_ != nullptr && "nullptrの実体にアクセスしようとしています");
 			return Get();
 		}
 
@@ -423,9 +321,10 @@ namespace utl
 
 	private:
 
-		RefCounter<Type>* ref_;
+		RefCounter* ref_;
 
 	};
+
 
 	/// <summary>
 	/// アロケータを指定してSharedPtrを作成する
@@ -438,7 +337,7 @@ namespace utl
 	template<typename Type, typename...ArgTypes>
 	inline SharedPtr<Type> MakeSharedWithAlloc(IMemoryAllocator* alloc, ArgTypes&&...args)
 	{
-		RefCounter<Type>* counter = MakeRefCounterWithAlloc<Type>(alloc, args...);
+		RefCounter* counter = MakeRefCounterWithAlloc<Type>(alloc, args...);
 		// Viewを作る
 		return SharedPtr<Type>(counter);
 	}
@@ -455,6 +354,4 @@ namespace utl
 	{
 		return MakeSharedWithAlloc<Type>(nullptr, args...);
 	}
-
-
 }

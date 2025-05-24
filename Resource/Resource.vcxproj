@@ -19,18 +19,22 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\ECOSTL.h" />
-    <ClInclude Include="include\src\dummy.h" />
-    <ClInclude Include="include\src\RecyclableID\RecyclableID.h" />
+    <ClInclude Include="include\Resource.hpp" />
+    <ClInclude Include="include\src\Load\Loader.h" />
+    <ClInclude Include="include\src\Registry\ResourceRegistry.h" />
+    <ClInclude Include="include\src\Storage\Pool\ResourcePool.h" />
+    <ClInclude Include="include\src\Storage\ResourceStorage.h" />
+    <ClInclude Include="include\src\View\ResourceView.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="include\src\dummy.cpp" />
+    <ClCompile Include="include\src\Registry\ResourceRegistry.cpp" />
+    <ClCompile Include="include\src\Storage\ResourceStorage.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{3342b3d8-9115-48a1-9bc3-0debebb3abd6}</ProjectGuid>
-    <RootNamespace>ECOSTL</RootNamespace>
+    <ProjectGuid>{77428ffa-a456-4579-b2e6-fdf347277b9c}</ProjectGuid>
+    <RootNamespace>Resource</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,7 +131,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Container\include\;$(SolutionDir)Memory\include\;$(SolutionDir)$(SolutionName)\include\;$(SolutionDir)$(SolutionName)\external\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)TypeInfo\include\;$(SolutionDir)Utility\include\;$(SolutionDir)Container\include\;$(SolutionDir)Memory\include\;$(SolutionDir)$(SolutionName)\include\;$(SolutionDir)$(SolutionName)\external\include\</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
@@ -136,11 +140,11 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <OutputFile>$(SolutionDir)$(SolutionName)\build\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(SolutionDir)$(ProjectName)\build\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)ECOSTL\build\$(Configuration)\;$(SolutionDir)TypeInfo\build\$(Configuration)\;$(SolutionDir)Container\build\$(Configuration)\;$(SolutionDir)Memory\build\$(Configuration)\;$(SolutionDir)$(ProjectName)\external\build\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Memory.lib;TypeInfo.lib;Container.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)TypeInfo\build\$(Configuration)\;$(SolutionDir)Utility\build\$(Configuration)\;$(SolutionDir)Container\build\$(Configuration)\;$(SolutionDir)Memory\build\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Memory.lib;Container.lib;Utility.lib;TypeInfo.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -154,7 +158,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Container\include\;$(SolutionDir)Memory\include\;$(SolutionDir)$(SolutionName)\include\;$(SolutionDir)$(SolutionName)\external\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)TypeInfo\include\;$(SolutionDir)Utility\include\;$(SolutionDir)Container\include\;$(SolutionDir)Memory\include\;$(SolutionDir)$(SolutionName)\include\;$(SolutionDir)$(SolutionName)\external\include\</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
@@ -165,11 +169,11 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <OutputFile>$(SolutionDir)$(SolutionName)\build\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(SolutionDir)$(ProjectName)\build\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)ECOSTL\build\$(Configuration)\;$(SolutionDir)TypeInfo\build\$(Configuration)\;$(SolutionDir)Container\build\$(Configuration)\;$(SolutionDir)Memory\build\$(Configuration)\;$(SolutionDir)$(ProjectName)\external\build\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Memory.lib;TypeInfo.lib;Container.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)TypeInfo\build\$(Configuration)\;$(SolutionDir)Utility\build\$(Configuration)\;$(SolutionDir)Container\build\$(Configuration)\;$(SolutionDir)Memory\build\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Memory.lib;Container.lib;Utility.lib;TypeInfo.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

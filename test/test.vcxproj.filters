@@ -15,6 +15,9 @@
     <ClCompile Include="tests\Container\Array\Dynamic\DynamicArrayTest.cpp">
       <Filter>tests\Container\Array\Dynamic</Filter>
     </ClCompile>
+    <ClCompile Include="tests\Resource\ResourceStorageTest.cpp">
+      <Filter>tests\Resource\Storage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tests\Memory\Pointer\Unique\UniquePtrTest.h">
@@ -61,6 +64,12 @@
     </Filter>
     <Filter Include="tests\Container\Array\Dynamic">
       <UniqueIdentifier>{c73cbab2-b84f-4add-802b-69ab556983b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\Resource">
+      <UniqueIdentifier>{063afe81-d046-4f72-bafc-1dc473da879f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\Resource\Storage">
+      <UniqueIdentifier>{37b0d152-1b2e-461b-a338-6c8c191eab9d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -64,15 +64,15 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)ECOSTL\include\;$(SolutionDir)Container\include\;$(SolutionDir)Memory\include\;$(SolusionDir)$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)TypeInfo\include\;$(SolutionDir)Resource\include\;$(SolutionDir)Utility\include\;$(SolutionDir)Container\include\;$(SolutionDir)Memory\include\;$(SolusionDir)$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)Memory\build\$(Configuration)\;$(SolutionDir)Logger\build\$(Configuration)\;$(SolutionDir)ECOSTL\build\$(Configuration)\;$(SolutionDir)Container\build\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Container.lib;Memory.lib;ECOSTL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)TypeInfo\build\$(Configuration)\;$(SolutionDir)Resource\build\$(Configuration)\;$(SolutionDir)Memory\build\$(Configuration)\;$(SolutionDir)Logger\build\$(Configuration)\;$(SolutionDir)Utility\build\$(Configuration)\;$(SolutionDir)Container\build\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Container.lib;Memory.lib;Utility.lib;Resource.lib;TypeInfo.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -100,7 +100,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)ECOSTL\include\;$(SolutionDir)Container\include\;$(SolutionDir)Memory\include\;$(SolusionDir)$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)TypeInfo\include\;$(SolutionDir)Resource\include\;$(SolutionDir)Utility\include\;$(SolutionDir)Container\include\;$(SolutionDir)Memory\include\;$(SolusionDir)$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
     </ClCompile>
@@ -109,8 +109,8 @@
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <AdditionalLibraryDirectories>$(SolutionDir)Memory\build\$(Configuration)\;$(SolutionDir)Logger\build\$(Configuration)\;$(SolutionDir)ECOSTL\build\$(Configuration)\;$(SolutionDir)Container\build\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Container.lib;Memory.lib;ECOSTL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)TypeInfo\build\$(Configuration)\;$(SolutionDir)Resource\build\$(Configuration)\;$(SolutionDir)Memory\build\$(Configuration)\;$(SolutionDir)Logger\build\$(Configuration)\;$(SolutionDir)Utility\build\$(Configuration)\;$(SolutionDir)Container\build\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Container.lib;Memory.lib;Utility.lib;Resource.lib;TypeInfo.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -128,6 +128,7 @@
     <ClCompile Include="tests\Container\Array\Dynamic\DynamicArrayTest.cpp" />
     <ClCompile Include="tests\Memory\Pointer\Shared\SharedPtrTest.cpp" />
     <ClCompile Include="tests\Memory\Pointer\Unique\UniquePtrTest.cpp" />
+    <ClCompile Include="tests\Resource\ResourceStorageTest.cpp" />
     <ClCompile Include="tests\TypeInfo\TypeID\TypeIDTest.cpp" />
   </ItemGroup>
   <ItemGroup>

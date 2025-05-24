@@ -2,29 +2,26 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="include">
-      <UniqueIdentifier>{3f41e9ac-dfd7-4358-ab8b-c658f0a9d6c1}</UniqueIdentifier>
+      <UniqueIdentifier>{c77a7aa0-31cc-4fff-8413-e0fd3006801f}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\src">
-      <UniqueIdentifier>{2c71793f-185c-41ef-8bde-0cc40f96bc4c}</UniqueIdentifier>
+      <UniqueIdentifier>{cee35ae2-7e88-49d6-a2df-33ab01c27770}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\src\RecyclableID">
-      <UniqueIdentifier>{e6e67b7f-67a4-44ab-9ad4-2a270b68d6e4}</UniqueIdentifier>
+      <UniqueIdentifier>{d2cc1f4e-854f-4f3e-8936-47d9b0e4d839}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\ECOSTL.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\src\dummy.h">
-      <Filter>include\src</Filter>
-    </ClInclude>
     <ClInclude Include="include\src\RecyclableID\RecyclableID.h">
       <Filter>include\src\RecyclableID</Filter>
     </ClInclude>
+    <ClInclude Include="include\Utility.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="include\src\dummy.cpp">
-      <Filter>include\src</Filter>
+    <ClCompile Include="include\src\RecyclableID\RecyclableID.cpp">
+      <Filter>include\src\RecyclableID</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

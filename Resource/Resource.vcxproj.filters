@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{eaaa8eae-bb3e-4e7a-a31f-11e4e438adba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src">
+      <UniqueIdentifier>{466c067e-2b61-4304-9c6d-d076313dac3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\Storage">
+      <UniqueIdentifier>{94f10375-5690-43fd-a968-1756c7d8b68f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\Load">
+      <UniqueIdentifier>{d4c741eb-ae6a-437f-a405-8eab98433afa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\Registry">
+      <UniqueIdentifier>{bc106e52-cbef-48a8-af4a-3051b1f1e9ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\Storage\Pool">
+      <UniqueIdentifier>{6b19c671-dd22-419e-acd2-c27e7c5b1f74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\View">
+      <UniqueIdentifier>{1f116462-123f-43fa-a12f-c5eaee5a6340}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Resource.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\src\Storage\ResourceStorage.h">
+      <Filter>include\src\Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="include\src\Load\Loader.h">
+      <Filter>include\src\Load</Filter>
+    </ClInclude>
+    <ClInclude Include="include\src\Registry\ResourceRegistry.h">
+      <Filter>include\src\Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="include\src\View\ResourceView.h">
+      <Filter>include\src\View</Filter>
+    </ClInclude>
+    <ClInclude Include="include\src\Storage\Pool\ResourcePool.h">
+      <Filter>include\src\Storage\Pool</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="include\src\Storage\ResourceStorage.cpp">
+      <Filter>include\src\Storage</Filter>
+    </ClCompile>
+    <ClCompile Include="include\src\Registry\ResourceRegistry.cpp">
+      <Filter>include\src\Registry</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -201,6 +201,10 @@ namespace utl
 		{
 			return *Get(index);
 		}
+		Type& operator[](const size_t index)
+		{
+			return *Get(index);
+		}
 
 		Type* Begin()const
 		{
@@ -278,7 +282,7 @@ namespace utl
 			for (size_t i = size_; i < size; ++i)
 			{
 				Type* ptr = begin_ + i;
-				new (ptr)Type(args...);
+				new (ptr) Type(args...);
 			}
 
 			// —v‘f”‚ªŒ¸‚Á‚½‚È‚ç‚»‚Ì•ªŠJ•ú

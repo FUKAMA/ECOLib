@@ -1,5 +1,6 @@
 #pragma once
 #include "../Vector/Vector.h"
+#include <utility>
 
 namespace utl
 {
@@ -286,7 +287,24 @@ namespace utl
 			return values_.EmplaceBack(src);
 		}
 
+		template<typename...ArgTypes>
+		Type* Insert(const DenceKey key, ArgTypes&&...args)
+		{
+			DenceIndex index = NULL_DENCE;
 
+			// すでにキーが追加されていたら上書きする
+			if (table_.CheckActive(key))
+			{
+				index = table_[key];
+				//values_[index] = Type(args...);
+				return &values_[index];
+			}
+
+			index = table_.Insert(key);
+			// 要素をコンテナに追加
+			// 有効な要素は前詰めで配置されるため、末尾に追加すればいい
+			return values_.EmplaceBack(args...);
+		}
 
 		//------------------------------------------
 		// 削除
@@ -306,7 +324,10 @@ namespace utl
 			DenceIndex backIndex = table_.Remove(removeKey);
 
 			// 削除する要素の末尾の要素を上書き
-			values_[remIndex] = values_[backIndex];
+			if (remIndex != backIndex)
+			{
+				values_[remIndex] = std::move(values_[backIndex]);
+			}
 
 			// 末尾の要素を無効化
 			values_.PopBack();

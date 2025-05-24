@@ -1,5 +1,6 @@
 #pragma once
 #include <cassert>
+#include <type_traits>
 #include "../../Logger/include/Logger.hpp"
 #include "../../Allocator/MemoryAllocator.h"
 
@@ -12,6 +13,9 @@ namespace utl
 	template<typename Type>
 	class UniquePtr
 	{
+	private:
+		template<typename SrcType>
+		friend class UniquePtr;
 	private:
 
 		template<typename T, typename...ArgTypes>
@@ -72,7 +76,6 @@ namespace utl
 			src.alloc_.Reset();
 			src.ptr_ = nullptr;
 		}
-
 		/// <summary>
 		/// ムーブを行う
 		/// </summary>
@@ -92,6 +95,53 @@ namespace utl
 			return *this;
 		}
 
+		/// <summary>
+		/// 派生クラスからキャストしてムーブ
+		/// </summary>
+		/// <typeparam name="BaseType"></typeparam>
+		/// <param name=""></param>
+		template<typename BaseType>
+		UniquePtr(UniquePtr<BaseType>&& src) noexcept
+			: alloc_(src.alloc_.Get())
+			, ptr_(src.Get())
+		{
+			src.MemAllocator().Reset();
+			src.ptr_ = nullptr;
+		}
+		//template<typename BaseType>
+		//UniquePtr(UniquePtr<BaseType>&& src) noexcept
+		//	:alloc_(src.MemAllocator()), ptr_(src.Get())
+		//{
+		//	src.MemAllocator().Reset();
+		//	src.ptr_ = nullptr;
+		//}
+		template<typename BaseType>
+		UniquePtr& operator=(UniquePtr<BaseType>&& src)noexcept
+		{
+			// すでに確保してるリソースがあったら開放
+			Reset();
+
+			alloc_ = src.alloc_;
+			ptr_ = src.ptr_;
+
+			src.alloc_.Reset();
+			src.ptr_ = nullptr;
+
+			return *this;
+		}
+
+		UniquePtr(nullptr_t)noexcept
+			:alloc_(nullptr), ptr_(nullptr)
+		{
+
+		}
+		UniquePtr& operator=(nullptr_t)noexcept
+		{
+			Reset();
+			return *this;
+		}
+
+
 		//----------------------------------------
 		// 開放
 		//----------------------------------------
@@ -99,7 +149,7 @@ namespace utl
 		/// <summary>
 		/// インスタンスを開放する
 		/// </summary>
-		void Reset()
+		void Reset()noexcept
 		{
 			if (!(*this))
 			{
@@ -140,6 +190,11 @@ namespace utl
 			assert(ptr_ != nullptr, "nullptrの実体にアクセスしようとしています！");
 			return Get();
 		}
+		Type* operator->()
+		{
+			assert(ptr_ != nullptr, "nullptrの実体にアクセスしようとしています！");
+			return Get();
+		}
 
 		/// <summary>
 		/// 管理してるインスタンスの実際を参照
@@ -154,6 +209,11 @@ namespace utl
 		operator bool()const
 		{
 			return ptr_ != nullptr;
+		}
+
+		MemoryAllocatorHolder& MemAllocator()
+		{
+			return alloc_;
 		}
 
 		//----------------------------------------

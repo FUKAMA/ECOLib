@@ -124,6 +124,5 @@ TEST(DynamicArrayTest, TestName)
 		//int cccc = dmAAAA[3];
 		int dddd = dmAAAA[3000];
 	}
-
 }
 
