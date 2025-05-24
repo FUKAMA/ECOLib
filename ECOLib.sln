@@ -34,6 +34,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Utility", "Utility\Utility.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Resource", "Resource\Resource.vcxproj", "{77428FFA-A456-4579-B2E6-FDF347277B9C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "STL", "STL", "{B8C96B80-2F77-44CA-AABB-68D40B1824D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -101,6 +103,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BBCA2715-6CEC-48D7-AC1B-3341DAE16772} = {B8C96B80-2F77-44CA-AABB-68D40B1824D0}
+		{D5813A48-EB77-4F34-92D9-CB712E5613F9} = {B8C96B80-2F77-44CA-AABB-68D40B1824D0}
+		{0FC3ADDF-CAE4-491A-B5A2-09470965C190} = {B8C96B80-2F77-44CA-AABB-68D40B1824D0}
+		{6B69E024-8171-4A1B-95E0-1DD0454F5990} = {B8C96B80-2F77-44CA-AABB-68D40B1824D0}
+		{EBC1714D-0570-46E0-A751-3E6F53A7E718} = {B8C96B80-2F77-44CA-AABB-68D40B1824D0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C2F692EF-B853-41F0-8B08-FD5E70F1D967}

@@ -96,13 +96,7 @@ namespace res
 		{
 			if (count_ == 0)
 			{
-				Type* ptr = alloc_.Allocate<Type>();
-				bool loadResult = loader_->Load(ptr);
-				if (!loadResult)
-				{
-					return false;
-				}
-				resource_ = ptr;
+				LoadResource();
 			}
 
 			++count_;
@@ -117,6 +111,7 @@ namespace res
 			}
 
 			ReleaseResource();
+			LoadResource();
 		}
 
 		inline void UnLook()
@@ -149,6 +144,18 @@ namespace res
 		}
 
 	private:
+
+		bool LoadResource()
+		{
+			Type* ptr = alloc_.Allocate<Type>();
+			bool loadResult = loader_->Load(ptr);
+			if (!loadResult)
+			{
+				return false;
+			}
+			resource_ = ptr;
+			return true;
+		}
 
 		void ReleaseResource()
 		{

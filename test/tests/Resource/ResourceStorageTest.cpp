@@ -53,10 +53,13 @@ TEST(ResourceStorageTest, Test)
 
 		EXPECT_EQ(100, pTex->dsdsds);
 	}
+
+
 	{
 		res::ResourceView<Texture> view1 = storage.Look<Texture>(id);
 		res::ResourceView<Texture> view2 = storage.Look<Texture>(id);
 		res::ResourceView<Texture> view3 = storage.Look<Texture>(id);
+		storage.ReLoad(id);
 		res::ResourceView<Texture> view4 = storage.Look<Texture>(id);
 		res::ResourceView<Texture> view5 = storage.Look<Texture>(id);
 
