@@ -56,7 +56,7 @@ namespace utl
 			if (table_.CheckActive(key))
 			{
 				index = table_[key];
-				//values_[index] = Type(args...);
+				values_[index] = Type(args...);
 				return &values_[index];
 			}
 

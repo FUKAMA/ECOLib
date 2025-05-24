@@ -18,7 +18,8 @@ namespace utl
 	constexpr uint32_t NULL_VALUE = UINT32_MAX;
 
 	/// <summary>
-	/// 連番の整数をキーとし、削除するときに最後の要素を削除する要素に上書きするテーブル
+	/// まばらなキーを密集した添え字に変換するテーブル
+	/// 削除するときに最後の要素を削除する要素に上書きする
 	/// </summary>
 	class SparseSet
 	{
