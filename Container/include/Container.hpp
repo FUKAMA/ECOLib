@@ -11,7 +11,10 @@
 //-----------------------------
 
 #include "src/Array/Static/StaticArray.h"
+
 #include "src/Array/Dynamic/DynamicArray.h"
+#include "src/Array/Dynamic/DynamicMultiArray.h"
+
 #include "src/Array/Resizable/ResizableArray.h"
 
 //-----------------------------

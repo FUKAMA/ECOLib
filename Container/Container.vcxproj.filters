@@ -66,13 +66,13 @@
     <ClInclude Include="include\src\Vector\ChunkVector.h">
       <Filter>include\src\Vector</Filter>
     </ClInclude>
+    <ClInclude Include="include\src\Array\Dynamic\DynamicMultiArray.h">
+      <Filter>include\src\Array\Dynamic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\src\Array\Resizable\ResizableArray.cpp">
       <Filter>include\src\Array\Resizable</Filter>
-    </ClCompile>
-    <ClCompile Include="include\src\Array\Dynamic\DynamicArray.cpp">
-      <Filter>include\src\Array\Dynamic</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

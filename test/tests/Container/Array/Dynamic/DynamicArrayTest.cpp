@@ -199,5 +199,8 @@ TEST(DynamicArrayTest, TestName)
 
 	cdmAAA.Insert(8000, 50);
 
+	utl::DynamicMultiArray<int, float> dmaAAA1(255);
+	utl::DynamicMultiArray<int, float> dmaAAA2(255, nullptr, 100, 500.f);
+
 }
 

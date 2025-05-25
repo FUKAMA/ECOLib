@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="include\Container.hpp" />
     <ClInclude Include="include\src\Array\Dynamic\DynamicArray.h" />
+    <ClInclude Include="include\src\Array\Dynamic\DynamicMultiArray.h" />
     <ClInclude Include="include\src\Array\Resizable\ResizableArray.h" />
     <ClInclude Include="include\src\Array\Static\StaticArray.h" />
     <ClInclude Include="include\src\Map\ChunkDenceMap.h" />
@@ -32,7 +33,6 @@
     <ClInclude Include="include\src\Vector\Vector.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="include\src\Array\Dynamic\DynamicArray.cpp" />
     <ClCompile Include="include\src\Array\Resizable\ResizableArray.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
