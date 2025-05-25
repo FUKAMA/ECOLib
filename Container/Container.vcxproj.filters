@@ -60,6 +60,12 @@
     <ClInclude Include="include\src\Set\Bit\ResizableBitSet.h">
       <Filter>include\src\Set\Bit</Filter>
     </ClInclude>
+    <ClInclude Include="include\src\Map\ChunkDenceMap.h">
+      <Filter>include\src\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="include\src\Vector\ChunkVector.h">
+      <Filter>include\src\Vector</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\src\Array\Resizable\ResizableArray.cpp">

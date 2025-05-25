@@ -50,7 +50,7 @@ namespace utl
 		/// </summary>
 		/// <param name="src"></param>
 		/// <returns></returns>
-		Vector& operator=(const Vector& src)
+		inline Vector& operator=(const Vector& src)
 		{
 			Clear();
 
@@ -81,7 +81,7 @@ namespace utl
 			, size_(src.size_)
 			, capacity_(src.capacity_)
 		{
-			src.alloc_.Reset();
+			//src.alloc_.Reset();
 			src.begin_ = nullptr;
 			src.size_ = 0;
 			src.capacity_ = 0;
@@ -91,7 +91,7 @@ namespace utl
 		/// </summary>
 		/// <param name="src"></param>
 		/// <returns></returns>
-		Vector& operator =(Vector&& src)
+		inline Vector& operator =(Vector&& src)
 		{
 			Clear();
 
@@ -100,7 +100,7 @@ namespace utl
 			size_ = src.size_;
 			capacity_ = src.capacity_;
 
-			src.alloc_.Reset();
+			//src.alloc_.Reset();
 			src.begin_ = nullptr;
 			src.size_ = 0;
 			src.capacity_ = 0;
@@ -117,7 +117,7 @@ namespace utl
 			Clear();
 		}
 
-		void Clear()
+		inline void Clear()
 		{
 			if (capacity_ <= 0)
 			{
@@ -135,7 +135,7 @@ namespace utl
 			capacity_ = 0;
 		}
 
-		void PopBack()
+		inline void PopBack()
 		{
 			if (size_ == 0)
 			{
@@ -148,15 +148,15 @@ namespace utl
 		// 追加
 		//------------------------------------------
 
-		Type* PushBack(const Type& src)
+		inline Type* PushBack(const Type& src)
 		{
 			// 容量が足りなければ確保する
-			if (capacity_ <= size_ + 1)
+			if (capacity_ <= size_)
 			{
-				ReserveSlack(size_ + 1);
+				Reserve(capacity_ * 2);
 			}
 
-			const size_t insertIndex = size_++;
+			const size_t insertIndex = size_;
 
 			Type* ptr = begin_ + insertIndex;
 
@@ -168,7 +168,7 @@ namespace utl
 		}
 
 		template<typename...ArgTypes>
-		Type* EmplaceBack(ArgTypes&&...args)
+		inline Type* EmplaceBack(ArgTypes&&...args)
 		{
 			// 容量が足りなければ確保する
 			if (capacity_ <= size_)
@@ -190,28 +190,33 @@ namespace utl
 		// 取得
 		//------------------------------------------
 
-		Type* Get(const size_t index)const
+		inline Type* Get(const size_t index)const
 		{
-			assert(index <= size_ && "範囲外アクセスです");
-
+			// 範囲外はNullを返す
+			if (index >= size_)
+			{
+				return nullptr;
+			}
 			return begin_ + index;
 		}
 
-		Type& operator[](const size_t index)const
+		inline Type& operator[](const size_t index)const
 		{
-			return *Get(index);
+			assert(index <= size_ && "範囲外アクセスです");
+			return *(begin_ + index);
 		}
-		Type& operator[](const size_t index)
+		inline Type& operator[](const size_t index)
 		{
-			return *Get(index);
+			assert(index <= size_ && "範囲外アクセスです");
+			return *(begin_ + index);
 		}
 
-		Type* Begin()const
+		inline Type* Begin()const
 		{
 			return begin_;
 		}
 
-		Type* Back()const
+		inline Type* Back()const
 		{
 			if (size_ == 0)
 			{
@@ -220,17 +225,17 @@ namespace utl
 			return begin_ + (size_ - 1);
 		}
 
-		size_t Size()const
+		inline size_t Size()const
 		{
 			return size_;
 		}
 
-		size_t Capacity()const
+		inline size_t Capacity()const
 		{
 			return capacity_;
 		}
 
-		bool Empty()const
+		inline bool Empty()const
 		{
 			return size_ == 0;
 		}
@@ -240,7 +245,7 @@ namespace utl
 		/// </summary>
 		/// <param name="index"></param>
 		/// <returns></returns>
-		bool IsContain(const size_t index)const
+		inline bool IsContain(const size_t index)const
 		{
 			if (index >= size_)
 			{
@@ -250,7 +255,7 @@ namespace utl
 		}
 
 
-		IMemoryAllocator* GetAlloc()
+		inline IMemoryAllocator* GetAlloc()const
 		{
 			return alloc_.Get();
 		}
@@ -259,7 +264,7 @@ namespace utl
 		// メモリ操作
 		//------------------------------------------
 
-		size_t GetSlack(const size_t begin, const size_t goal)const
+		inline size_t GetSlack(const size_t begin, const size_t goal)const
 		{
 			size_t newCapacity = begin;
 			if (begin < 2)
@@ -276,7 +281,7 @@ namespace utl
 		}
 
 		template<typename...ArgTypes>
-		void Resize(const size_t size, ArgTypes&&...args)
+		inline void Resize(const size_t size, ArgTypes&&...args)
 		{
 			// もしメモリが足りなければ確保
 			if (size > capacity_)
@@ -304,7 +309,7 @@ namespace utl
 		/// <summary>
 		/// キャパシティを要素数にいい感じに合わせる
 		/// </summary>
-		void FitSlack()
+		inline void FitSlack()
 		{
 			size_t newCapacity = GetSlack(1, size_);
 			ChangeCapacity(newCapacity);
@@ -313,7 +318,7 @@ namespace utl
 		/// <summary>
 		/// キャパシティを要素数に合わせる
 		/// </summary>
-		void Fit()
+		inline void Fit()
 		{
 			ChangeCapacity(size_);
 		}
@@ -322,7 +327,7 @@ namespace utl
 		/// いい感じに余裕をもってキャパシティを拡大する
 		/// </summary>
 		/// <param name="capacity"></param>
-		void ReserveSlack(const size_t capacity)
+		inline void ReserveSlack(const size_t capacity)
 		{
 			// 指定した容量が今と同じかそれ以下だったら何もしない
 			if (capacity_ >= capacity)
@@ -339,7 +344,7 @@ namespace utl
 		/// 縮小はしない
 		/// </summary>
 		/// <param name="capacity"></param>
-		void Reserve(size_t capacity)
+		inline void Reserve(size_t capacity)
 		{
 			if (capacity == 0)
 			{
@@ -360,7 +365,7 @@ namespace utl
 		/// サイズより小さくはならない
 		/// </summary>
 		/// <param name="capacity"></param>
-		void Reduce(const size_t capacity)
+		inline void Reduce(const size_t capacity)
 		{
 			// 指定した容量が今と同じかそれ以下だったら何もしない
 			if (capacity_ <= capacity)
@@ -375,7 +380,7 @@ namespace utl
 		/// サイズより小さくはならない
 		/// </summary>
 		/// <param name="capacity"></param>
-		void ChangeCapacity(const size_t capacity)
+		inline void ChangeCapacity(const size_t capacity)
 		{
 			const bool equalCapacity = capacity == capacity_;
 			const bool smallerSize = size_ > capacity;
@@ -394,7 +399,7 @@ namespace utl
 		/// 容量が要素数より少ない場合、要素は開放される
 		/// </summary>
 		/// <param name="capacity"></param>
-		void ChangeMemorySize(const size_t capacity)
+		inline void ChangeMemorySize(const size_t capacity)
 		{
 			if (capacity == capacity_)
 			{
@@ -439,6 +444,7 @@ namespace utl
 			capacity_ = capacity;
 
 		}
+
 
 
 

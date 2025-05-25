@@ -17,6 +17,13 @@
 //-----------------------------
 // Vector
 //-----------------------------
-
 #include "src/Vector/Vector.h"
+#include "src/Vector/ChunkVector.h"
+
+
+//-----------------------------
+// Map
+//-----------------------------
+
 #include "src/Map/DenceMap.h"
+#include "src/Map/ChunkDenceMap.h"

@@ -100,8 +100,8 @@ namespace utl
 		/// </summary>
 		/// <typeparam name="BaseType"></typeparam>
 		/// <param name=""></param>
-		template<typename BaseType>
-		UniquePtr(UniquePtr<BaseType>&& src) noexcept
+		template<typename SubType>
+		UniquePtr(UniquePtr<SubType>&& src) noexcept
 			: alloc_(src.alloc_.Get())
 			, ptr_(src.Get())
 		{

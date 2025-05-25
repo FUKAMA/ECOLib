@@ -1,5 +1,7 @@
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
+#include <thread>
+#include <vector>
 
 struct ResourceID
 {
@@ -16,6 +18,8 @@ TEST(DynamicArrayTest, TestName)
 	utl::ResizableArray<int> a(5, nullptr, 554);
 
 	a.Get(4);
+
+	std::atomic<int> aaa;
 
 	utl::DynamicArray<int, 5> s(nullptr, 77);
 
@@ -172,7 +176,28 @@ TEST(DynamicArrayTest, TestName)
 	EXPECT_EQ(true, bs1.IsContain(bs1));
 	EXPECT_EQ(true, bs1.IsContain(bs2));
 	EXPECT_EQ(false, bs2.IsContain(bs1));
-	
+
+	utl::ChunkVector<int> hhh(256);
+
+	hhh.Begin();
+	hhh.EmplaceBack(123);
+	hhh.Begin();
+	EXPECT_EQ(123, *hhh.Back());
+	for (size_t i = 0; i < 100000; i++)
+	{
+		hhh.EmplaceBack(123);
+	}
+	EXPECT_EQ(1 + 100000, hhh.Size());
+	hhh.Size();
+
+
+	hhh.Resize(10);
+	hhh.Resize(1000);
+
+
+	utl::ChunkDenceMap<int> cdmAAA(5);
+
+	cdmAAA.Insert(8000, 50);
 
 }
 
