@@ -1,33 +1,63 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ソース ファイル">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="include">
+      <UniqueIdentifier>{af961b01-bca4-474b-94f0-5c416446a82f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="include\src">
+      <UniqueIdentifier>{406e6e49-fa4b-4400-8333-b4dc7f0caa1d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="リソース ファイル">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="include\src\Entity">
+      <UniqueIdentifier>{22127c9c-44c8-4f04-8a04-fc4f3f3aac78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\Archetype">
+      <UniqueIdentifier>{673dbbd7-3de4-452f-b5b4-296102a4c207}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\Component">
+      <UniqueIdentifier>{056ec600-d764-4f4a-94b5-b63117e9958d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\Component\Pool">
+      <UniqueIdentifier>{1eb22f1a-ffd6-4d62-b17f-5005e1f937cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\Component\Storage">
+      <UniqueIdentifier>{f0480a8b-1940-452f-84c3-5adf90bc0d61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\Component\Storage\Chunk">
+      <UniqueIdentifier>{c2680d9c-7a57-4e80-9170-968037101a90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\Entity\Allocator">
+      <UniqueIdentifier>{bb14fdf4-3bc2-43bd-a132-2a3b668256fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\Archetype\Registry">
+      <UniqueIdentifier>{2665cf86-c150-4345-a14d-2c44def6f80c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\Component\Type">
+      <UniqueIdentifier>{c10db690-bc37-4ea4-95dc-ab551ee5d5fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\src\Archetype\Generator">
+      <UniqueIdentifier>{ef5dafff-30b6-43ce-9f74-7038f7d5cd2b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="include\ECS.hpp">
+      <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="include\src\Component\Pool\ComponentPool.h">
+      <Filter>include\src\Component\Pool</Filter>
+    </ClInclude>
+    <ClInclude Include="include\src\Archetype\Archetype.h">
+      <Filter>include\src\Archetype</Filter>
+    </ClInclude>
+    <ClInclude Include="include\src\Component\Type\CompTypeIDGenerator.h">
+      <Filter>include\src\Component\Type</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ECS.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="include\src\Component\Pool\ComponentPool.cpp">
+      <Filter>include\src\Component\Pool</Filter>
     </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="include\src\Archetype\Archetype.cpp">
+      <Filter>include\src\Archetype</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
