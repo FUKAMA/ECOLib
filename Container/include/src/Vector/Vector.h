@@ -249,6 +249,12 @@ namespace utl
 			return true;
 		}
 
+
+		IMemoryAllocator* GetAlloc()
+		{
+			return alloc_.Get();
+		}
+
 		//------------------------------------------
 		// ƒƒ‚ƒŠ‘€ì
 		//------------------------------------------
