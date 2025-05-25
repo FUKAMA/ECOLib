@@ -90,10 +90,35 @@ namespace utl
 			return m_id;
 		}
 
+		inline TypeID GetID()
+		{
+			return m_id;
+		}
+
 	private:
 
 		TypeID m_id = 0;
 
+	};
+
+	class StaticTypeIDAllocator
+	{
+	public:
+		inline static size_t Allocate()
+		{
+			return nextGeneID++;
+		}
+
+	private:
+
+		inline static size_t nextGeneID = 0;
+	};
+
+
+	template<typename...Types>
+	struct StaticTypeIDContainer
+	{
+		inline static TypeID id = StaticTypeIDAllocator::Allocate();
 	};
 
 	/// <summary>
@@ -108,6 +133,18 @@ namespace utl
 	{
 		static TypeIDContainer<Types...> idContainer;
 		return idContainer.GetID(a_allocator);
+	}
+
+	/// <summary>
+	/// 型ごとに一意で連番なIDを生成する関数
+	/// 高速な代わりに異なる静的領域間では同じIDを参照不可
+	/// </summary>
+	/// <typeparam name="...Types"></typeparam>
+	/// <returns></returns>
+	template<typename...Types>
+	inline static TypeID GetTypeID()
+	{
+		return StaticTypeIDContainer<Types...>::id;
 	}
 
 }

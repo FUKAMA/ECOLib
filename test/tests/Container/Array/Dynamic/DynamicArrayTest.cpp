@@ -200,7 +200,13 @@ TEST(DynamicArrayTest, TestName)
 	cdmAAA.Insert(8000, 50);
 
 	utl::DynamicMultiArray<int, float> dmaAAA1(255);
-	utl::DynamicMultiArray<int, float> dmaAAA2(255, nullptr, 100, 500.f);
+	utl::DynamicMultiArray<int, float, int, float> dmaAAA2(255, nullptr, 100, 500.f, 200, 300.f);
+
+	int* intptr = dmaAAA2.GetBegin<int>(1);
+	float* fptr = dmaAAA2.GetBegin<float>(1);
+
+	int* intptr2 = dmaAAA2.GetBegin<int>(2);
+	float* fptr2 = dmaAAA2.GetBegin<float>(2);
 
 }
 
