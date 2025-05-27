@@ -3,6 +3,10 @@
 
 namespace utl
 {
+	/// <summary>
+	/// メモリの再確保をチャンク単位で行うメモリが連続する可変長配列
+	/// </summary>
+	/// <typeparam name="Type"></typeparam>
 	template<typename Type>
 	class ChunkVector
 	{
@@ -11,32 +15,56 @@ namespace utl
 		// 作成
 		//------------------------------------------
 
-		ChunkVector(const size_t blockSize, IMemoryAllocator* alloc, IMemoryAllocator* valAlloc)
-			: blocks_(alloc)
+		/// <summary>
+		/// チャンクのサイズ、管理用のメモリアロケータ、要素用のメモリアロケータを指定して作成
+		/// </summary>
+		/// <param name="chunkSize"></param>
+		/// <param name="alloc"></param>
+		/// <param name="valAlloc"></param>
+		ChunkVector(const size_t chunkSize, IMemoryAllocator* alloc, IMemoryAllocator* valAlloc)
+			: chunks_(alloc)
 			, valueMemAlloc_(valAlloc)
-			, blockSize_(blockSize)
+			, chunkSize_(chunkSize)
 		{
 
 		}
-		ChunkVector(const size_t blockSize, IMemoryAllocator* alloc = nullptr)
-			: blocks_(alloc)
+		/// <summary>
+		/// チャンクのサイズと管理用、要素用の共用メモリアロケータを指定して作成
+		/// </summary>
+		/// <param name="chunkSize"></param>
+		/// <param name="alloc"></param>
+		ChunkVector(const size_t chunkSize = 64, IMemoryAllocator* alloc = nullptr)
+			: chunks_(alloc)
 			, valueMemAlloc_(alloc)
-			, blockSize_(blockSize)
+			, chunkSize_(chunkSize)
 		{
 
 		}
 
-		ChunkVector(const size_t blockSize, const size_t capacity, IMemoryAllocator* alloc, IMemoryAllocator* valAlloc)
-			: blocks_(capacity, alloc)
+		/// <summary>
+		/// チャンクのサイズ、初期状態の容量、管理用のメモリアロケータ、要素用のメモリアロケータを指定して作成
+		/// </summary>
+		/// <param name="chunkSize"></param>
+		/// <param name="capacity"></param>
+		/// <param name="alloc"></param>
+		/// <param name="valAlloc"></param>
+		ChunkVector(const size_t chunkSize, const size_t capacity, IMemoryAllocator* alloc, IMemoryAllocator* valAlloc)
+			: chunks_(GetChunkIndex(capacity) + 1, alloc)
 			, valueMemAlloc_(valAlloc)
-			, blockSize_(blockSize)
+			, chunkSize_(chunkSize)
 		{
 
 		}
-		ChunkVector(const size_t blockSize, const size_t capacity, IMemoryAllocator* alloc = nullptr)
-			: blocks_(capacity, alloc)
+		/// <summary>
+		/// チャンクのサイズと管理用、初期状態の容量、要素用の共用メモリアロケータを指定して作成
+		/// </summary>
+		/// <param name="chunkSize"></param>
+		/// <param name="capacity"></param>
+		/// <param name="alloc"></param>
+		ChunkVector(const size_t chunkSize, const size_t capacity, IMemoryAllocator* alloc = nullptr)
+			: chunks_(GetChunkIndex(capacity) + 1, alloc)
 			, valueMemAlloc_(alloc)
-			, blockSize_(blockSize)
+			, chunkSize_(chunkSize)
 		{
 
 		}
@@ -46,26 +74,26 @@ namespace utl
 		//------------------------------------------
 
 		/// <summary>
-		/// 
+		/// コピーして作成するコンストラクタ
 		/// </summary>
 		/// <param name="src"></param>
 		ChunkVector(const ChunkVector& src)
-			:blocks_(src.blocks_)
+			:chunks_(src.chunks_)
 			, valueMemAlloc_(src.valueMemAlloc_.Get())
-			, blockSize_(src.blockSize_)
+			, chunkSize_(src.chunkSize_)
 		{
 
 		}
 		/// <summary>
-		/// 
+		/// すでに確保した要素を開放しコピーする
 		/// </summary>
 		/// <param name="src"></param>
 		/// <returns></returns>
 		ChunkVector& operator=(const ChunkVector& src)
 		{
 			Clear();
-			blocks_ = src.blocks_;
-			blockSize_ = src.blockSize_;
+			chunks_ = src.chunks_;
+			chunkSize_ = src.chunkSize_;
 			valueMemAlloc_ = src.valueMemAlloc_;
 			return *this;
 		}
@@ -76,9 +104,9 @@ namespace utl
 		/// </summary>
 		/// <param name="src"></param>
 		ChunkVector(ChunkVector&& src)
-			:blocks_(src.blocks_)
+			:chunks_(src.chunks_)
 			, valueMemAlloc_(src.valueMemAlloc_.Get())
-			, blockSize_(src.blockSize_)
+			, chunkSize_(src.chunkSize_)
 		{
 
 		}
@@ -90,8 +118,8 @@ namespace utl
 		ChunkVector& operator=(ChunkVector&& src)
 		{
 			Clear();
-			blocks_ = src.blocks_;
-			blockSize_ = src.blockSize_;
+			chunks_ = src.chunks_;
+			chunkSize_ = src.chunkSize_;
 			valueMemAlloc_ = src.valueMemAlloc_;
 			return *this;
 		}
@@ -105,23 +133,30 @@ namespace utl
 			Clear();
 		}
 
+		/// <summary>
+		/// 確保した要素を全てを開放する
+		/// </summary>
 		void Clear()
 		{
-			blocks_.Clear();
+			chunks_.Clear();
 		}
 
+		/// <summary>
+		/// 末尾の要素を削除する
+		/// 末尾のチャンクが空になったらチャンクごとポップする
+		/// </summary>
 		void PopBack()
 		{
-			if (blocks_.Empty())
+			if (chunks_.Empty())
 			{
 				return;
 			}
-			// 末尾のブロックの末尾の要素をポップ
-			blocks_.Back()->PopBack();
-			// 末尾のブロックが空になったら末尾のブロックをポップ
-			if (blocks_.Back()->Empty())
+			// 末尾のチャンクの末尾の要素をポップ
+			chunks_.Back()->PopBack();
+			// 末尾のチャンクが空になったら末尾のチャンクをポップ
+			if (chunks_.Back()->Empty())
 			{
-				blocks_.PopBack();
+				chunks_.PopBack();
 			}
 		}
 
@@ -129,138 +164,244 @@ namespace utl
 		// 追加
 		//------------------------------------------
 
+		/// <summary>
+		/// 参照から末尾に要素を追加する
+		/// </summary>
+		/// <param name="src"></param>
+		/// <returns></returns>
 		Type* PushBack(const Type& src)
 		{
-			// ブロックが無ければ作成
-			if (blocks_.Empty())
+			// チャンクが無ければ作成
+			if (chunks_.Empty())
 			{
-				blocks_.EmplaceBack(blockSize_, valueMemAlloc_.Get());
+				chunks_.EmplaceBack(chunkSize_, valueMemAlloc_.Get());
 			}
-			// 末尾のブロックに空きがなければ作成
-			if (blocks_.Back()->Size() >= blockSize_)
+			// 末尾のチャンクに空きがなければ作成
+			if (chunks_.Back()->Size() >= chunkSize_)
 			{
-				blocks_.EmplaceBack(blockSize_, valueMemAlloc_.Get());
+				chunks_.EmplaceBack(chunkSize_, valueMemAlloc_.Get());
 			}
-			return blocks_.Back()->PushBack(src);
+			return chunks_.Back()->PushBack(src);
+		}
+		/// <summary>
+		/// 末尾に空の要素を追加
+		/// </summary>
+		/// <returns></returns>
+		Type* PushBack()
+		{
+			// チャンクが無ければ作成
+			if (chunks_.Empty())
+			{
+				chunks_.EmplaceBack(chunkSize_, valueMemAlloc_.Get());
+			}
+			// 末尾のチャンクに空きがなければ作成
+			if (chunks_.Back()->Size() >= chunkSize_)
+			{
+				chunks_.EmplaceBack(chunkSize_, valueMemAlloc_.Get());
+			}
+			return chunks_.Back()->PushBack();
 		}
 
+		/// <summary>
+		/// コンストラクタ引数から末尾に要素を追加する
+		/// </summary>
+		/// <typeparam name="...ArgTypes"></typeparam>
+		/// <param name="...args"></param>
+		/// <returns></returns>
 		template<typename...ArgTypes>
 		Type* EmplaceBack(ArgTypes&&...args)
 		{
-			// ブロックが無ければ作成
-			if (blocks_.Empty())
+			// チャンクが無ければ作成
+			if (chunks_.Empty())
 			{
-				blocks_.EmplaceBack(blockSize_, valueMemAlloc_.Get());
+				chunks_.EmplaceBack(chunkSize_, valueMemAlloc_.Get());
 			}
-			// 末尾のブロックに空きがなければ作成
-			if (blocks_.Back()->Size() >= blockSize_)
+			// 末尾のチャンクに空きがなければ作成
+			if (chunks_.Back()->Size() >= chunkSize_)
 			{
-				blocks_.EmplaceBack(blockSize_, valueMemAlloc_.Get());
+				chunks_.EmplaceBack(chunkSize_, valueMemAlloc_.Get());
 			}
-			return blocks_.Back()->EmplaceBack(args...);
+			return chunks_.Back()->EmplaceBack(args...);
 		}
 
 		//------------------------------------------
 		// 取得
 		//------------------------------------------
 
-		inline constexpr size_t GetBlockIndex(const size_t index)const
+
+		/// <summary>
+		/// 引数の添え字の要素が入るチャンクの添え字を求める
+		/// </summary>
+		/// <param name="index"></param>
+		/// <returns></returns>
+		inline constexpr size_t GetChunkIndex(const size_t index)const
 		{
-			return index / blockSize_;
+			return index / chunkSize_;
 		}
 
+		/// <summary>
+		/// 引数の要素がチャンク内で格納される添え字を求める
+		/// </summary>
+		/// <param name="index"></param>
+		/// <returns></returns>
 		inline constexpr size_t GetValueIndex(const size_t index)const
 		{
-			return index % blockSize_;
+			return index % chunkSize_;
 		}
 
-		inline constexpr size_t GetBlockSize()const
+		/// <summary>
+		/// チャンク一つの大きさを求める
+		/// </summary>
+		/// <returns></returns>
+		inline constexpr size_t GetChunkSize()const
 		{
-			return blockSize_;
+			return chunkSize_;
 		}
 
-		const Vector<Type>* GetBLock(const size_t blockIndex)const
+		/// <summary>
+		/// チャンクの数を求める
+		/// </summary>
+		/// <returns></returns>
+		inline constexpr size_t GetChunkNum()const
 		{
-			return blocks_.Get(blockIndex);
+			return chunks_.Size();
 		}
 
+		/// <summary>
+		/// チャンクを添え字を使い取得
+		/// </summary>
+		/// <param name="chunkIndex"></param>
+		/// <returns></returns>
+		const Vector<Type>* GetChunk(const size_t chunkIndex)const
+		{
+			return chunks_.Get(chunkIndex);
+		}
+
+		/// <summary>
+		/// 添え字から要素のポインタを取得
+		/// </summary>
+		/// <param name="index"></param>
+		/// <returns></returns>
 		Type* Get(const size_t index)const
 		{
-			const size_t blockIndex = GetBlockIndex(index);
+			const size_t chunkIndex = GetChunkIndex(index);
 			const size_t valueIndex = GetValueIndex(index);
 
-			const Vector<Type>* backBlock = GetBLock(blockIndex);
-			assert(backBlock != nullptr && "範囲外アクセスです");
+			const Vector<Type>* backChunk = GetChunk(chunkIndex);
+			assert(backChunk != nullptr && "範囲外アクセスです");
 
-			Type* ptr = backBlock->Get(valueIndex);
+			Type* ptr = backChunk->Get(valueIndex);
 			assert(ptr != nullptr && "範囲外アクセスです");
 
 			return ptr;
 		}
 
+		/// <summary>
+		/// 添え字から要素の参照を取得
+		/// </summary>
+		/// <param name="index"></param>
+		/// <returns></returns>
 		Type& operator[](const size_t index)const
 		{
-			return blocks_[GetBlockIndex(index)][GetValueIndex(index)];
+			return chunks_[GetChunkIndex(index)][GetValueIndex(index)];
 		}
+		/// <summary>
+		/// 添え字から要素の参照を取得
+		/// </summary>
+		/// <param name="index"></param>
+		/// <returns></returns>
 		Type& operator[](const size_t index)
 		{
-			return blocks_[GetBlockIndex(index)][GetValueIndex(index)];
+			return chunks_[GetChunkIndex(index)][GetValueIndex(index)];
 		}
 
+		/// <summary>
+		/// 引数のブロックの先頭アドレスを取得する
+		/// </summary>
+		/// <param name="index"></param>
+		/// <returns></returns>
+		inline constexpr Type* BeginFromChunk(const size_t index = 0)const
+		{
+			if (!chunks_.IsContain(index))
+			{
+				return nullptr;
+			}
+			return chunks_[index].Begin();
+		}
+		/// <summary>
+		/// 先頭の要素のポインタを取得
+		/// 先頭のチャンクの先頭の要素のポインタを取得
+		/// チャンクを超えたら連続は途切れるため注意
+		/// </summary>
+		/// <returns></returns>
 		Type* Begin()const
 		{
-			if (blocks_.Empty())
-			{
-				return nullptr;
-			}
-			if (blocks_.Begin()->Empty())
-			{
-				return nullptr;
-			}
-			return blocks_.Begin()->Begin();
+			return BeginFromChunk(0);
 		}
 
+		inline constexpr Type* BackFromChunk(const size_t index = 0)const
+		{
+			if (!chunks_.IsContain(index))
+			{
+				return nullptr;
+			}
+			return chunks_[index].Back();
+		}
+		/// <summary>
+		/// 末尾の要素を取得
+		/// 末尾のチャンクの末尾の要素を取得
+		/// チャンクを超えたら連続は途切れるため注意
+		/// </summary>
+		/// <returns></returns>
 		Type* Back()const
 		{
-			if (blocks_.Empty())
+			if (chunks_.Empty())
 			{
 				return nullptr;
 			}
-			if (blocks_.Back()->Empty())
-			{
-				return nullptr;
-			}
-			return blocks_.Back()->Back();
+			return BackFromChunk(chunks_.Size() - 1);
 		}
 
+		/// <summary>
+		/// 要素の総数を取得
+		/// </summary>
+		/// <returns></returns>
 		size_t Size()const
 		{
 			size_t result = 0;
-			if (blocks_.Empty())
+			if (chunks_.Empty())
 			{
 				return result;
 			}
-			if (blocks_.Size() >= 2)
+			if (chunks_.Size() >= 2)
 			{
-				result += (blocks_.Size() - 1) * blockSize_;
+				result += (chunks_.Size() - 1) * chunkSize_;
 			}
-			result += blocks_.Back()->Size();
+			result += chunks_.Back()->Size();
 
 			return result;
 		}
 
+		/// <summary>
+		/// 格納可能な容量の総数を取得
+		/// </summary>
+		/// <returns></returns>
 		size_t Capacity()const
 		{
-			return blocks_.Capacity() * blockSize_;
+			return chunks_.Capacity() * chunkSize_;
 		}
 
+		/// <summary>
+		/// 要素が入って無ければTrue
+		/// </summary>
+		/// <returns></returns>
 		bool Empty()const
 		{
-			if (blocks_.Empty())
+			if (chunks_.Empty())
 			{
 				return true;
 			}
-			return blocks_.Back()->Empty();
+			return chunks_.Back()->Empty();
 		}
 
 		/// <summary>
@@ -270,25 +411,28 @@ namespace utl
 		/// <returns></returns>
 		bool IsContain(const size_t index)const
 		{
-			const size_t blockIndex = GetBlockIndex(index);
+			const size_t chunkIndex = GetChunkIndex(index);
 			const size_t valueIndex = GetValueIndex(index);
 
-			if (!blocks_.IsContain(blockIndex))
+			if (!chunks_.IsContain(chunkIndex))
 			{
 				return false;
 			}
 
-			return blocks_[blockIndex].IsContain(valueIndex);
+			return chunks_[chunkIndex].IsContain(valueIndex);
 		}
 
 		//------------------------------------------
 		// メモリ操作
 		//------------------------------------------
 
-		//size_t GetSlack(const size_t begin, const size_t goal)const
-		//{
-		//}
-
+		/// <summary>
+		/// 要素の個数を変更
+		/// 
+		/// </summary>
+		/// <typeparam name="...ArgTypes"></typeparam>
+		/// <param name="size"></param>
+		/// <param name="...args"></param>
 		template<typename...ArgTypes>
 		void Resize(const size_t size, ArgTypes&&...args)
 		{
@@ -298,27 +442,49 @@ namespace utl
 				return;
 			}
 
-			size_t beforeBlockNum = blocks_.Size();
-			size_t afterBlockNum = GetBlockIndex(size - 1) + 1;
-			// ブロックの数を変更
-			blocks_.Resize(afterBlockNum, blockSize_, valueMemAlloc_.Get());
-			// ブロックが増えたなら初期化する
-			for (size_t i = beforeBlockNum; i < afterBlockNum; i++)
+			size_t beforeChunkNum = chunks_.Size();
+			size_t afterChunkNum = GetChunkIndex(size - 1) + 1;
+			// チャンクの数を変更
+			chunks_.Resize(afterChunkNum, chunkSize_, valueMemAlloc_.Get());
+			// チャンクが増えたなら初期化する
+			for (size_t i = beforeChunkNum; i < afterChunkNum; i++)
 			{
-				blocks_[i].Resize(blockSize_, args...);
+				chunks_[i].Resize(chunkSize_, args...);
 			}
 
-			// 末尾のブロックの整合性を取る
-			blocks_.Back()->Resize(GetValueIndex(size - 1) + 1, args...);
+			// 末尾のチャンクの整合性を取る
+			chunks_.Back()->Resize(GetValueIndex(size - 1) + 1, args...);
+		}
+
+		void Resize(const size_t size, const Type& src)
+		{
+			if (size == 0)
+			{
+				Clear();
+				return;
+			}
+
+			size_t beforeChunkNum = chunks_.Size();
+			size_t afterChunkNum = GetChunkIndex(size - 1) + 1;
+			// チャンクの数を変更
+			chunks_.Resize(afterChunkNum, chunkSize_, valueMemAlloc_.Get());
+			// チャンクが増えたなら初期化する
+			for (size_t i = beforeChunkNum; i < afterChunkNum; i++)
+			{
+				chunks_[i].Resize(chunkSize_, src);
+			}
+
+			// 末尾のチャンクの整合性を取る
+			chunks_.Back()->Resize(GetValueIndex(size - 1) + 1, src);
 		}
 
 
 
 	private:
 
-		Vector<Vector<Type>> blocks_;
+		Vector<Vector<Type>> chunks_;
 		MemoryAllocatorHolder valueMemAlloc_;
-		size_t blockSize_;
+		size_t chunkSize_;
 
 	};
 }

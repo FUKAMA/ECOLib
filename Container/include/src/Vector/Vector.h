@@ -306,6 +306,31 @@ namespace utl
 			size_ = size;
 		}
 
+		inline void Resize(const size_t size, const Type& src)
+		{
+			// もしメモリが足りなければ確保
+			if (size > capacity_)
+			{
+				ReserveSlack(size);
+			}
+
+			// 要素数が増えたならその分を初期化
+			for (size_t i = size_; i < size; ++i)
+			{
+				Type* ptr = begin_ + i;
+				new (ptr) Type(src);
+			}
+
+			// 要素数が減ったならその分開放
+			for (size_t i = size; i < size_; ++i)
+			{
+				Type* ptr = begin_ + i;
+				ptr->~Type();
+			}
+
+			size_ = size;
+		}
+
 		/// <summary>
 		/// キャパシティを要素数にいい感じに合わせる
 		/// </summary>
